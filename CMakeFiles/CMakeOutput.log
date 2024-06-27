@@ -1,0 +1,270 @@
+The system is: Linux - 5.14.21-150400.24.55-default - x86_64
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin/icpx 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+
+The CXX compiler identification is IntelLLVM, found in "/home/majumder/bitsandbytes_kernel_samples/tests/CMakeFiles/3.20.4/CompilerIdCXX/a.out"
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: /home/majumder/bitsandbytes_kernel_samples/tests/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_0100a/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_0100a.dir/build.make CMakeFiles/cmTC_0100a.dir/build
+gmake[1]: Entering directory '/home/majumder/bitsandbytes_kernel_samples/tests/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_0100a.dir/CMakeCXXCompilerABI.cpp.o
+/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin/icpx   -v -MD -MT CMakeFiles/cmTC_0100a.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_0100a.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_0100a.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+Intel(R) oneAPI DPC++/C++ Compiler 2023.2.0 (2023.2.0.20230622)
+Target: x86_64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm
+Configuration file: /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../bin/icpx.cfg
+Found candidate GCC installation: /usr/lib64/gcc/x86_64-suse-linux/11
+Found candidate GCC installation: /usr/lib64/gcc/x86_64-suse-linux/7
+Selected GCC installation: /usr/lib64/gcc/x86_64-suse-linux/11
+Candidate multilib: .;@m64
+Selected multilib: .;@m64
+ (in-process)
+ "/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/clang" -cc1 -triple x86_64-unknown-linux-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model static -fveclib=SVML -mframe-pointer=none -menable-no-infs -menable-no-nans -fapprox-func -funsafe-math-optimizations -fno-signed-zeros -mreassociate -freciprocal-math -fdenormal-fp-math=preserve-sign,preserve-sign -ffp-contract=fast -fno-rounding-math -ffast-math -ffinite-math-only -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -mllvm -x86-enable-unaligned-vector-move=true -tune-cpu generic -debugger-tuning=gdb -v -fcoverage-compilation-dir=/home/majumder/bitsandbytes_kernel_samples/tests/CMakeFiles/CMakeTmp -resource-dir /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/lib/clang/17 -dependency-file CMakeFiles/cmTC_0100a.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_0100a.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -I/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dpl/2022.2.0/linux/include -I/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dpcpp-ct/2023.2.0/include -I/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dev-utilities/2021.10.0/include -I/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dal/2023.2.0/include -I/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dnnl/2023.2.0/cpu_dpcpp_gpu_dpcpp/include -I/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/tbb/2021.10.0/include -I/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/mkl/2023.2.0/include -I/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/include -I/home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/include/oneapi/ccl -I/home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/include/oneapi -I/usr/mpi/mpich-ofi-all-icc-default-pmix-gpu-drop20231026/include -internal-isystem /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../compiler/include -internal-isystem /usr/lib64/gcc/x86_64-suse-linux/11/../../../../include/c++/11 -internal-isystem /usr/lib64/gcc/x86_64-suse-linux/11/../../../../include/c++/11/x86_64-suse-linux -internal-isystem /usr/lib64/gcc/x86_64-suse-linux/11/../../../../include/c++/11/backward -internal-isystem /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/lib/clang/17/include -internal-isystem /usr/local/include -internal-isystem /usr/lib64/gcc/x86_64-suse-linux/11/../../../../x86_64-suse-linux/include -internal-externc-isystem /include -internal-externc-isystem /usr/include -O2 -fdeprecated-macro -fdebug-compilation-dir=/home/majumder/bitsandbytes_kernel_samples/tests/CMakeFiles/CMakeTmp -ferror-limit 19 -fheinous-gnu-extensions -fgnuc-version=4.2.1 -fcxx-exceptions -fexceptions -vectorize-loops -vectorize-slp -D__GCC_HAVE_DWARF2_CFI_ASM=1 -fintel-compatibility -fintel-libirc-allowed -mllvm -disable-hir-generate-mkl-call -mllvm -loopopt=1 -floopopt-pipeline=light -mllvm -intel-abi-compatible=true -o CMakeFiles/cmTC_0100a.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+clang -cc1 version 17.0.0 based upon LLVM 17.0.0git default target x86_64-unknown-linux-gnu
+ignoring nonexistent directory "/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dpl/2022.2.0/linux/include
+ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dpcpp-ct/2023.2.0/include
+ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dev-utilities/2021.10.0/include
+ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dal/2023.2.0/include
+ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dnnl/2023.2.0/cpu_dpcpp_gpu_dpcpp/include
+ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/tbb/2021.10.0/include
+ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/mkl/2023.2.0/include
+ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/include
+ /home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/include/oneapi/ccl
+ /home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/include/oneapi
+ /usr/mpi/mpich-ofi-all-icc-default-pmix-gpu-drop20231026/include
+ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../compiler/include
+ /usr/lib64/gcc/x86_64-suse-linux/11/../../../../include/c++/11
+ /usr/lib64/gcc/x86_64-suse-linux/11/../../../../include/c++/11/x86_64-suse-linux
+ /usr/lib64/gcc/x86_64-suse-linux/11/../../../../include/c++/11/backward
+ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/lib/clang/17/include
+ /usr/local/include
+ /usr/lib64/gcc/x86_64-suse-linux/11/../../../../x86_64-suse-linux/include
+ /usr/include
+End of search list.
+Linking CXX executable cmTC_0100a
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0100a.dir/link.txt --verbose=1
+/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin/icpx  -v CMakeFiles/cmTC_0100a.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_0100a 
+Intel(R) oneAPI DPC++/C++ Compiler 2023.2.0 (2023.2.0.20230622)
+Target: x86_64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm
+Configuration file: /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../bin/icpx.cfg
+Found candidate GCC installation: /usr/lib64/gcc/x86_64-suse-linux/11
+Found candidate GCC installation: /usr/lib64/gcc/x86_64-suse-linux/7
+Selected GCC installation: /usr/lib64/gcc/x86_64-suse-linux/11
+Candidate multilib: .;@m64
+Selected multilib: .;@m64
+ "/usr/lib64/gcc/x86_64-suse-linux/11/../../../../x86_64-suse-linux/bin/ld" -z relro --hash-style=both --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_0100a /usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64/crt1.o /usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64/crti.o /usr/lib64/gcc/x86_64-suse-linux/11/crtbegin.o -L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/compiler/lib/intel64_lin -L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../lib -L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/compiler/lib/intel64_lin -L/usr/lib64/gcc/x86_64-suse-linux/11 -L/usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-suse-linux/11/../../../../x86_64-suse-linux/lib -L/usr/lib64/gcc/x86_64-suse-linux/11/../../.. -L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../lib -L/lib -L/usr/lib -L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dal/2023.2.0/lib/intel64 -L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dnnl/2023.2.0/cpu_dpcpp_gpu_dpcpp/lib -L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/tbb/2021.10.0/lib/intel64/gcc4.8 -L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/mkl/2023.2.0/lib/intel64 -L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/lib -L/home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/lib -L/usr/mpi/mpich-ofi-all-icc-default-pmix-gpu-drop20231026/lib CMakeFiles/cmTC_0100a.dir/CMakeCXXCompilerABI.cpp.o -Bstatic -lsvml -Bdynamic -Bstatic -lirng -Bdynamic -lstdc++ -Bstatic -limf -Bdynamic -lm -lgcc_s -lgcc -Bstatic -lirc -Bdynamic -ldl -lgcc_s -lgcc -lc -lgcc_s -lgcc -Bstatic -lirc_s -Bdynamic /usr/lib64/gcc/x86_64-suse-linux/11/crtend.o /usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64/crtn.o
+gmake[1]: Leaving directory '/home/majumder/bitsandbytes_kernel_samples/tests/CMakeFiles/CMakeTmp'
+
+
+
+Parsed CXX implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dpl/2022.2.0/linux/include]
+    add: [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dpcpp-ct/2023.2.0/include]
+    add: [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dev-utilities/2021.10.0/include]
+    add: [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dal/2023.2.0/include]
+    add: [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dnnl/2023.2.0/cpu_dpcpp_gpu_dpcpp/include]
+    add: [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/tbb/2021.10.0/include]
+    add: [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/mkl/2023.2.0/include]
+    add: [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/include]
+    add: [/home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/include/oneapi/ccl]
+    add: [/home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/include/oneapi]
+    add: [/usr/mpi/mpich-ofi-all-icc-default-pmix-gpu-drop20231026/include]
+    add: [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../compiler/include]
+    add: [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../include/c++/11]
+    add: [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../include/c++/11/x86_64-suse-linux]
+    add: [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../include/c++/11/backward]
+    add: [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/lib/clang/17/include]
+    add: [/usr/local/include]
+    add: [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../x86_64-suse-linux/include]
+    add: [/usr/include]
+  end of search list found
+  collapse include dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dpl/2022.2.0/linux/include] ==> [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dpl/2022.2.0/linux/include]
+  collapse include dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dpcpp-ct/2023.2.0/include] ==> [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dpcpp-ct/2023.2.0/include]
+  collapse include dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dev-utilities/2021.10.0/include] ==> [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dev-utilities/2021.10.0/include]
+  collapse include dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dal/2023.2.0/include] ==> [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dal/2023.2.0/include]
+  collapse include dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dnnl/2023.2.0/cpu_dpcpp_gpu_dpcpp/include] ==> [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dnnl/2023.2.0/cpu_dpcpp_gpu_dpcpp/include]
+  collapse include dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/tbb/2021.10.0/include] ==> [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/tbb/2021.10.0/include]
+  collapse include dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/mkl/2023.2.0/include] ==> [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/mkl/2023.2.0/include]
+  collapse include dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/include] ==> [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/include]
+  collapse include dir [/home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/include/oneapi/ccl] ==> [/home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/include/oneapi/ccl]
+  collapse include dir [/home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/include/oneapi] ==> [/home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/include/oneapi]
+  collapse include dir [/usr/mpi/mpich-ofi-all-icc-default-pmix-gpu-drop20231026/include] ==> [/usr/mpi/mpich-ofi-all-icc-default-pmix-gpu-drop20231026/include]
+  collapse include dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../compiler/include] ==> [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/compiler/include]
+  collapse include dir [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../include/c++/11] ==> [/usr/include/c++/11]
+  collapse include dir [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../include/c++/11/x86_64-suse-linux] ==> [/usr/include/c++/11/x86_64-suse-linux]
+  collapse include dir [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../include/c++/11/backward] ==> [/usr/include/c++/11/backward]
+  collapse include dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/lib/clang/17/include] ==> [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/lib/clang/17/include]
+  collapse include dir [/usr/local/include] ==> [/usr/local/include]
+  collapse include dir [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../x86_64-suse-linux/include] ==> [/usr/x86_64-suse-linux/include]
+  collapse include dir [/usr/include] ==> [/usr/include]
+  implicit include dirs: [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dpl/2022.2.0/linux/include;/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dpcpp-ct/2023.2.0/include;/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dev-utilities/2021.10.0/include;/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dal/2023.2.0/include;/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dnnl/2023.2.0/cpu_dpcpp_gpu_dpcpp/include;/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/tbb/2021.10.0/include;/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/mkl/2023.2.0/include;/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/include;/home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/include/oneapi/ccl;/home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/include/oneapi;/usr/mpi/mpich-ofi-all-icc-default-pmix-gpu-drop20231026/include;/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/compiler/include;/usr/include/c++/11;/usr/include/c++/11/x86_64-suse-linux;/usr/include/c++/11/backward;/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/lib/clang/17/include;/usr/local/include;/usr/x86_64-suse-linux/include;/usr/include]
+
+
+Parsed CXX implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/majumder/bitsandbytes_kernel_samples/tests/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_0100a/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_0100a.dir/build.make CMakeFiles/cmTC_0100a.dir/build]
+  ignore line: [gmake[1]: Entering directory '/home/majumder/bitsandbytes_kernel_samples/tests/CMakeFiles/CMakeTmp']
+  ignore line: [Building CXX object CMakeFiles/cmTC_0100a.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin/icpx   -v -MD -MT CMakeFiles/cmTC_0100a.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_0100a.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_0100a.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Intel(R) oneAPI DPC++/C++ Compiler 2023.2.0 (2023.2.0.20230622)]
+  ignore line: [Target: x86_64-unknown-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm]
+  ignore line: [Configuration file: /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../bin/icpx.cfg]
+  ignore line: [Found candidate GCC installation: /usr/lib64/gcc/x86_64-suse-linux/11]
+  ignore line: [Found candidate GCC installation: /usr/lib64/gcc/x86_64-suse-linux/7]
+  ignore line: [Selected GCC installation: /usr/lib64/gcc/x86_64-suse-linux/11]
+  ignore line: [Candidate multilib: .]
+  ignore line: [@m64]
+  ignore line: [Selected multilib: .]
+  ignore line: [@m64]
+  ignore line: [ (in-process)]
+  ignore line: [ "/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/clang" -cc1 -triple x86_64-unknown-linux-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model static -fveclib=SVML -mframe-pointer=none -menable-no-infs -menable-no-nans -fapprox-func -funsafe-math-optimizations -fno-signed-zeros -mreassociate -freciprocal-math -fdenormal-fp-math=preserve-sign preserve-sign -ffp-contract=fast -fno-rounding-math -ffast-math -ffinite-math-only -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -mllvm -x86-enable-unaligned-vector-move=true -tune-cpu generic -debugger-tuning=gdb -v -fcoverage-compilation-dir=/home/majumder/bitsandbytes_kernel_samples/tests/CMakeFiles/CMakeTmp -resource-dir /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/lib/clang/17 -dependency-file CMakeFiles/cmTC_0100a.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_0100a.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -I/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dpl/2022.2.0/linux/include -I/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dpcpp-ct/2023.2.0/include -I/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dev-utilities/2021.10.0/include -I/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dal/2023.2.0/include -I/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dnnl/2023.2.0/cpu_dpcpp_gpu_dpcpp/include -I/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/tbb/2021.10.0/include -I/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/mkl/2023.2.0/include -I/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/include -I/home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/include/oneapi/ccl -I/home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/include/oneapi -I/usr/mpi/mpich-ofi-all-icc-default-pmix-gpu-drop20231026/include -internal-isystem /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../compiler/include -internal-isystem /usr/lib64/gcc/x86_64-suse-linux/11/../../../../include/c++/11 -internal-isystem /usr/lib64/gcc/x86_64-suse-linux/11/../../../../include/c++/11/x86_64-suse-linux -internal-isystem /usr/lib64/gcc/x86_64-suse-linux/11/../../../../include/c++/11/backward -internal-isystem /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/lib/clang/17/include -internal-isystem /usr/local/include -internal-isystem /usr/lib64/gcc/x86_64-suse-linux/11/../../../../x86_64-suse-linux/include -internal-externc-isystem /include -internal-externc-isystem /usr/include -O2 -fdeprecated-macro -fdebug-compilation-dir=/home/majumder/bitsandbytes_kernel_samples/tests/CMakeFiles/CMakeTmp -ferror-limit 19 -fheinous-gnu-extensions -fgnuc-version=4.2.1 -fcxx-exceptions -fexceptions -vectorize-loops -vectorize-slp -D__GCC_HAVE_DWARF2_CFI_ASM=1 -fintel-compatibility -fintel-libirc-allowed -mllvm -disable-hir-generate-mkl-call -mllvm -loopopt=1 -floopopt-pipeline=light -mllvm -intel-abi-compatible=true -o CMakeFiles/cmTC_0100a.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [clang -cc1 version 17.0.0 based upon LLVM 17.0.0git default target x86_64-unknown-linux-gnu]
+  ignore line: [ignoring nonexistent directory "/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dpl/2022.2.0/linux/include]
+  ignore line: [ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dpcpp-ct/2023.2.0/include]
+  ignore line: [ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dev-utilities/2021.10.0/include]
+  ignore line: [ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dal/2023.2.0/include]
+  ignore line: [ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dnnl/2023.2.0/cpu_dpcpp_gpu_dpcpp/include]
+  ignore line: [ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/tbb/2021.10.0/include]
+  ignore line: [ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/mkl/2023.2.0/include]
+  ignore line: [ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/include]
+  ignore line: [ /home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/include/oneapi/ccl]
+  ignore line: [ /home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/include/oneapi]
+  ignore line: [ /usr/mpi/mpich-ofi-all-icc-default-pmix-gpu-drop20231026/include]
+  ignore line: [ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../compiler/include]
+  ignore line: [ /usr/lib64/gcc/x86_64-suse-linux/11/../../../../include/c++/11]
+  ignore line: [ /usr/lib64/gcc/x86_64-suse-linux/11/../../../../include/c++/11/x86_64-suse-linux]
+  ignore line: [ /usr/lib64/gcc/x86_64-suse-linux/11/../../../../include/c++/11/backward]
+  ignore line: [ /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/lib/clang/17/include]
+  ignore line: [ /usr/local/include]
+  ignore line: [ /usr/lib64/gcc/x86_64-suse-linux/11/../../../../x86_64-suse-linux/include]
+  ignore line: [ /usr/include]
+  ignore line: [End of search list.]
+  ignore line: [Linking CXX executable cmTC_0100a]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0100a.dir/link.txt --verbose=1]
+  ignore line: [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin/icpx  -v CMakeFiles/cmTC_0100a.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_0100a ]
+  ignore line: [Intel(R) oneAPI DPC++/C++ Compiler 2023.2.0 (2023.2.0.20230622)]
+  ignore line: [Target: x86_64-unknown-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm]
+  ignore line: [Configuration file: /home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../bin/icpx.cfg]
+  ignore line: [Found candidate GCC installation: /usr/lib64/gcc/x86_64-suse-linux/11]
+  ignore line: [Found candidate GCC installation: /usr/lib64/gcc/x86_64-suse-linux/7]
+  ignore line: [Selected GCC installation: /usr/lib64/gcc/x86_64-suse-linux/11]
+  ignore line: [Candidate multilib: .]
+  ignore line: [@m64]
+  ignore line: [Selected multilib: .]
+  ignore line: [@m64]
+  link line: [ "/usr/lib64/gcc/x86_64-suse-linux/11/../../../../x86_64-suse-linux/bin/ld" -z relro --hash-style=both --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_0100a /usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64/crt1.o /usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64/crti.o /usr/lib64/gcc/x86_64-suse-linux/11/crtbegin.o -L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/compiler/lib/intel64_lin -L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../lib -L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/compiler/lib/intel64_lin -L/usr/lib64/gcc/x86_64-suse-linux/11 -L/usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-suse-linux/11/../../../../x86_64-suse-linux/lib -L/usr/lib64/gcc/x86_64-suse-linux/11/../../.. -L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../lib -L/lib -L/usr/lib -L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dal/2023.2.0/lib/intel64 -L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dnnl/2023.2.0/cpu_dpcpp_gpu_dpcpp/lib -L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/tbb/2021.10.0/lib/intel64/gcc4.8 -L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/mkl/2023.2.0/lib/intel64 -L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/lib -L/home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/lib -L/usr/mpi/mpich-ofi-all-icc-default-pmix-gpu-drop20231026/lib CMakeFiles/cmTC_0100a.dir/CMakeCXXCompilerABI.cpp.o -Bstatic -lsvml -Bdynamic -Bstatic -lirng -Bdynamic -lstdc++ -Bstatic -limf -Bdynamic -lm -lgcc_s -lgcc -Bstatic -lirc -Bdynamic -ldl -lgcc_s -lgcc -lc -lgcc_s -lgcc -Bstatic -lirc_s -Bdynamic /usr/lib64/gcc/x86_64-suse-linux/11/crtend.o /usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64/crtn.o]
+    arg [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../x86_64-suse-linux/bin/ld] ==> ignore
+    arg [-zrelro] ==> ignore
+    arg [--hash-style=both] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_x86_64] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_0100a] ==> ignore
+    arg [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64/crt1.o] ==> obj [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64/crt1.o]
+    arg [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64/crti.o] ==> obj [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64/crti.o]
+    arg [/usr/lib64/gcc/x86_64-suse-linux/11/crtbegin.o] ==> obj [/usr/lib64/gcc/x86_64-suse-linux/11/crtbegin.o]
+    arg [-L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/compiler/lib/intel64_lin] ==> dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/compiler/lib/intel64_lin]
+    arg [-L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../lib] ==> dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../lib]
+    arg [-L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/compiler/lib/intel64_lin] ==> dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/compiler/lib/intel64_lin]
+    arg [-L/usr/lib64/gcc/x86_64-suse-linux/11] ==> dir [/usr/lib64/gcc/x86_64-suse-linux/11]
+    arg [-L/usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64] ==> dir [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64]
+    arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+    arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+    arg [-L/usr/lib64/gcc/x86_64-suse-linux/11/../../../../x86_64-suse-linux/lib] ==> dir [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../x86_64-suse-linux/lib]
+    arg [-L/usr/lib64/gcc/x86_64-suse-linux/11/../../..] ==> dir [/usr/lib64/gcc/x86_64-suse-linux/11/../../..]
+    arg [-L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../lib] ==> dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../lib]
+    arg [-L/lib] ==> dir [/lib]
+    arg [-L/usr/lib] ==> dir [/usr/lib]
+    arg [-L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dal/2023.2.0/lib/intel64] ==> dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dal/2023.2.0/lib/intel64]
+    arg [-L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dnnl/2023.2.0/cpu_dpcpp_gpu_dpcpp/lib] ==> dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dnnl/2023.2.0/cpu_dpcpp_gpu_dpcpp/lib]
+    arg [-L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/tbb/2021.10.0/lib/intel64/gcc4.8] ==> dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/tbb/2021.10.0/lib/intel64/gcc4.8]
+    arg [-L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/mkl/2023.2.0/lib/intel64] ==> dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/mkl/2023.2.0/lib/intel64]
+    arg [-L/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/lib] ==> dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/lib]
+    arg [-L/home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/lib] ==> dir [/home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/lib]
+    arg [-L/usr/mpi/mpich-ofi-all-icc-default-pmix-gpu-drop20231026/lib] ==> dir [/usr/mpi/mpich-ofi-all-icc-default-pmix-gpu-drop20231026/lib]
+    arg [CMakeFiles/cmTC_0100a.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [-Bstatic] ==> ignore
+    arg [-lsvml] ==> lib [svml]
+    arg [-Bdynamic] ==> ignore
+    arg [-Bstatic] ==> ignore
+    arg [-lirng] ==> lib [irng]
+    arg [-Bdynamic] ==> ignore
+    arg [-lstdc++] ==> lib [stdc++]
+    arg [-Bstatic] ==> ignore
+    arg [-limf] ==> lib [imf]
+    arg [-Bdynamic] ==> ignore
+    arg [-lm] ==> lib [m]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [-Bstatic] ==> ignore
+    arg [-lirc] ==> lib [irc]
+    arg [-Bdynamic] ==> ignore
+    arg [-ldl] ==> lib [dl]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [-lc] ==> lib [c]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [-Bstatic] ==> ignore
+    arg [-lirc_s] ==> lib [irc_s]
+    arg [-Bdynamic] ==> ignore
+    arg [/usr/lib64/gcc/x86_64-suse-linux/11/crtend.o] ==> obj [/usr/lib64/gcc/x86_64-suse-linux/11/crtend.o]
+    arg [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64/crtn.o] ==> obj [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64/crtn.o]
+  collapse obj [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64/crt1.o] ==> [/usr/lib64/crt1.o]
+  collapse obj [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64/crti.o] ==> [/usr/lib64/crti.o]
+  collapse obj [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64/crtn.o] ==> [/usr/lib64/crtn.o]
+  collapse library dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/compiler/lib/intel64_lin] ==> [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/compiler/lib/intel64_lin]
+  collapse library dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../lib] ==> [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/lib]
+  collapse library dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/compiler/lib/intel64_lin] ==> [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/compiler/lib/intel64_lin]
+  collapse library dir [/usr/lib64/gcc/x86_64-suse-linux/11] ==> [/usr/lib64/gcc/x86_64-suse-linux/11]
+  collapse library dir [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../lib64] ==> [/usr/lib64]
+  collapse library dir [/lib/../lib64] ==> [/lib64]
+  collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+  collapse library dir [/usr/lib64/gcc/x86_64-suse-linux/11/../../../../x86_64-suse-linux/lib] ==> [/usr/x86_64-suse-linux/lib]
+  collapse library dir [/usr/lib64/gcc/x86_64-suse-linux/11/../../..] ==> [/usr/lib64]
+  collapse library dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/bin-llvm/../lib] ==> [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/lib]
+  collapse library dir [/lib] ==> [/lib]
+  collapse library dir [/usr/lib] ==> [/usr/lib]
+  collapse library dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dal/2023.2.0/lib/intel64] ==> [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dal/2023.2.0/lib/intel64]
+  collapse library dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dnnl/2023.2.0/cpu_dpcpp_gpu_dpcpp/lib] ==> [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dnnl/2023.2.0/cpu_dpcpp_gpu_dpcpp/lib]
+  collapse library dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/tbb/2021.10.0/lib/intel64/gcc4.8] ==> [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/tbb/2021.10.0/lib/intel64/gcc4.8]
+  collapse library dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/mkl/2023.2.0/lib/intel64] ==> [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/mkl/2023.2.0/lib/intel64]
+  collapse library dir [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/lib] ==> [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/lib]
+  collapse library dir [/home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/lib] ==> [/home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/lib]
+  collapse library dir [/usr/mpi/mpich-ofi-all-icc-default-pmix-gpu-drop20231026/lib] ==> [/usr/mpi/mpich-ofi-all-icc-default-pmix-gpu-drop20231026/lib]
+  implicit libs: [svml;irng;stdc++;imf;m;gcc_s;gcc;irc;dl;gcc_s;gcc;c;gcc_s;gcc;irc_s]
+  implicit objs: [/usr/lib64/crt1.o;/usr/lib64/crti.o;/usr/lib64/gcc/x86_64-suse-linux/11/crtbegin.o;/usr/lib64/gcc/x86_64-suse-linux/11/crtend.o;/usr/lib64/crtn.o]
+  implicit dirs: [/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/compiler/lib/intel64_lin;/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/compiler/2023.2.0/linux/lib;/usr/lib64/gcc/x86_64-suse-linux/11;/usr/lib64;/lib64;/usr/x86_64-suse-linux/lib;/lib;/usr/lib;/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dal/2023.2.0/lib/intel64;/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/dnnl/2023.2.0/cpu_dpcpp_gpu_dpcpp/lib;/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/tbb/2021.10.0/lib/intel64/gcc4.8;/home/ftartagl/oneapi/inteloneapi-basekit-hpckit.2023.2.003/mkl/2023.2.0/lib/intel64;/home/maliangl/hello_mpi/libraries.performance.communication.oneccl/build/_install/lib;/usr/mpi/mpich-ofi-all-icc-default-pmix-gpu-drop20231026/lib]
+  implicit fwks: []
+
+

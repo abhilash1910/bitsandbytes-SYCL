@@ -1,0 +1,9 @@
+torch
+numpy
+
+[benchmark]
+pandas
+matplotlib
+
+[test]
+scipy

@@ -1,0 +1,21 @@
+Metadata-Version: 2.1
+Name: bitsandbytes
+Version: 0.43.2.dev0
+Summary: k-bit optimizers and matrix multiplication routines.
+Home-page: https://github.com/TimDettmers/bitsandbytes
+Author: Tim Dettmers
+Author-email: dettmers@cs.washington.edu
+License: MIT
+Keywords: gpu optimizers optimization 8-bit quantization compression
+Classifier: Development Status :: 4 - Beta
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Description-Content-Type: text/markdown
+Requires-Dist: torch
+Requires-Dist: numpy
+Provides-Extra: benchmark
+Requires-Dist: pandas; extra == "benchmark"
+Requires-Dist: matplotlib; extra == "benchmark"
+Provides-Extra: test
+Requires-Dist: scipy; extra == "test"
+
+nothing

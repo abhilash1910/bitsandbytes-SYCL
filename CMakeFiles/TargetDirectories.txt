@@ -1,0 +1,3 @@
+/home/majumder/bitsandbytes_kernel_samples/tests/CMakeFiles/rebuild_cache.dir
+/home/majumder/bitsandbytes_kernel_samples/tests/CMakeFiles/edit_cache.dir
+/home/majumder/bitsandbytes_kernel_samples/tests/CMakeFiles/bitsandbytes.dir
