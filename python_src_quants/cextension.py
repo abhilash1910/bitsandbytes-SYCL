@@ -88,7 +88,8 @@ class SYCLBNBNativeLibrary(BNBNativeLibrary):
 def get_native_library() -> BNBNativeLibrary:
     binary_path = PACKAGE_DIR / f"libbitsandbytes_sycl.so"
     sycl_binary_path = binary_path
-    binary_path = "/bitsandbytes/libbitsandbytes_sycl.so"  #change this to abs path
+    print(sycl_binary_path)
+    binary_path = "bitsandbytes/libbitsandbytes_sycl.so"  #change this to abs path
     """
     if sycl_binary_path.exists():
         binary_path = sycl_binary_path
