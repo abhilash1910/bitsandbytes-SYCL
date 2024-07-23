@@ -1064,15 +1064,15 @@ typedef sycl::accessor<unsigned char, 1> sycl_dacc_uc;
 
 template<typename T>
 SYCL_EXTERNAL 
-void kEstimateQuantiles(const T *A, float *code, const float offset, const T max_val, const int n,
-                        const sycl::nd_item<3> &item_ct1, sycl_la tacc, const sycl::accessor<T, 1> &dacc_A, const sycl_dacc_float &dacc_code)
+void kEstimateQuantiles(T*__restrict__ const A, float *code, const float offset, const T max_val, const int n,
+                        const sycl::nd_item<3> &item_ct1, const sycl_la &tacc, const sycl::accessor<T, 1> &dacc_A, const sycl_dacc_float &dacc_code)
 {
   const int n_full = (BLOCK_ESTIMATE*(n/BLOCK_ESTIMATE)) + (n % BLOCK_ESTIMATE == 0 ? 0 : BLOCK_ESTIMATE);
   int valid_items = (item_ct1.get_group(2)+1 == item_ct1.get_group_range(2)) ? n - (item_ct1.get_group(2)*BLOCK_ESTIMATE) : BLOCK_ESTIMATE;
   const int base_idx = (item_ct1.get_group(2) * BLOCK_ESTIMATE);
   const float reciprocal_num_blocks = 1.0f/(n < 4096 ? 1.0f : (n/BLOCK_ESTIMATE));
   
-  using group_load = dpct::group::workgroup_load<NUM_ESTIMATE, dpct::group::load_algorithm::BLOCK_LOAD_DIRECT, int,  int *, sycl::nd_item<3>>;
+  using group_load = dpct::group::workgroup_load<NUM_ESTIMATE, dpct::group::load_algorithm::BLOCK_LOAD_DIRECT, T,  T *, sycl::nd_item<3>>;
   //using group_radix_sort = dpct::group::radix_sort<int, NUM_ESTIMATE>;
         
   T vals[NUM_ESTIMATE];
@@ -4128,8 +4128,8 @@ template void kgetColRowStats<sycl::half, 64, 4, 16, 64*4, 1>(sycl::half * __res
 template unsigned char dQuantize<0>(float* smem_code, const float rand, float x);
 template unsigned char dQuantize<1>(float* smem_code, const float rand, float x);
 
-template<typename T> SYCL_EXTERNAL void kEstimateQuantiles(const T A, float *code, const float offset, const float max_val, const int n, const sycl::nd_item<3> &item_ct1, const sycl_la &tacc, const sycl::accessor<T, 1> &dacc_A,  const sycl_dacc_float &dacc_code);
-template<typename T> SYCL_EXTERNAL void kEstimateQuantiles(const T A, float *code, const float offset, const sycl::half max_val, const int n, const sycl::nd_item<3> &item_ct1, const sycl_la &tacc, const sycl::accessor<T, 1> &dacc_A, const sycl_dacc_float &dacc_code);
+template SYCL_EXTERNAL void kEstimateQuantiles<float>(float* __restrict__ const A, float *code, const float offset, const float max_val, const int n, const sycl::nd_item<3> &item_ct1, const sycl_la &tacc, const sycl::accessor<float, 1> &dacc_A, const sycl_dacc_float &dacc_code);
+template SYCL_EXTERNAL void kEstimateQuantiles<sycl::half>(sycl::half* __restrict__ const A, float *code, const float offset, const sycl::half max_val, const int n, const sycl::nd_item<3> &item_ct1, const sycl_la &tacc, const sycl::accessor<sycl::half, 1> &dacc_A, const sycl_dacc_float &dacc_code);
 
 #define MAKE_PreconditionOptimizer32bit1State(oname, gtype) \
 template SYCL_EXTERNAL void kPreconditionOptimizer32bit1State<gtype, oname, 4096, 8>(gtype* g, gtype* p, \
