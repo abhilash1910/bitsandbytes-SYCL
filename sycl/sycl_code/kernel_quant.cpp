@@ -1771,7 +1771,7 @@ void kOptimizer32bit2State(T* g, T* p,
 template<typename T, int OPTIMIZER, int BLOCK_SIZE, int NUM_VALS>
 SYCL_EXTERNAL 
 void kPreconditionOptimizer32bit1State(T* g, T* p,
-                float* buff_state1, float *unorm,
+                float* state1, float *unorm,
                 const float beta1, const float beta2, const float eps, const float weight_decay,
                 const int step, const float lr, const float gnorm_scale, const int n,
                 const sycl::nd_item<3> &item_ct1,const sycl_la &tacc,const sycl::accessor<T, 1> &dacc_g,const sycl_dacc_float &dacc_state1,
