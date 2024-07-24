@@ -4146,6 +4146,9 @@ MAKE_PreconditionOptimizer32bit1State(LION, float)
 MAKE_PreconditionOptimizer32bit1State(LION, sycl::ext::oneapi::bfloat16)
 MAKE_PreconditionOptimizer32bit1State(ADAGRAD, sycl::half)
 MAKE_PreconditionOptimizer32bit1State(ADAGRAD, float)
+MAKE_PreconditionOptimizer32bit1State(ADAM, sycl::half)
+MAKE_PreconditionOptimizer32bit1State(ADAM, float)
+MAKE_PreconditionOptimizer32bit1State(ADAM, sycl::ext::oneapi::bfloat16)
 
 #define MAKE_Optimizer32bit1State(oname, gtype) \
 template SYCL_EXTERNAL void kOptimizer32bit1State<gtype, oname>(gtype* g, gtype* p, float* state1, float *unorm, const float max_unorm, const float param_norm, \
@@ -4160,6 +4163,9 @@ MAKE_Optimizer32bit1State(LION, float)
 MAKE_Optimizer32bit1State(LION, sycl::ext::oneapi::bfloat16)
 MAKE_Optimizer32bit1State(ADAGRAD, sycl::half)
 MAKE_Optimizer32bit1State(ADAGRAD, float)
+MAKE_Optimizer32bit1State(ADAM, sycl::half)
+MAKE_Optimizer32bit1State(ADAM, float)
+MAKE_Optimizer32bit1State(ADAM, sycl::ext::oneapi::bfloat16)
 
 #define MAKE_PreconditionOptimizer32bit2State(oname, gtype) \
 template SYCL_EXTERNAL void kPreconditionOptimizer32bit2State<gtype, oname, 4096, 8>(gtype* g, gtype* p,  \
@@ -4170,6 +4176,16 @@ template SYCL_EXTERNAL void kPreconditionOptimizer32bit2State<gtype, oname, 4096
 MAKE_PreconditionOptimizer32bit2State(ADAM, float)
 MAKE_PreconditionOptimizer32bit2State(ADAM, sycl::half)
 MAKE_PreconditionOptimizer32bit2State(ADAM, sycl::ext::oneapi::bfloat16)
+MAKE_PreconditionOptimizer32bit2State(MOMENTUM, float)
+MAKE_PreconditionOptimizer32bit2State(MOMENTUM, sycl::half)
+MAKE_PreconditionOptimizer32bit2State(RMSPROP, float)
+MAKE_PreconditionOptimizer32bit2State(RMSPROP, sycl::half)
+MAKE_PreconditionOptimizer32bit2State(LION, float)
+MAKE_PreconditionOptimizer32bit2State(LION, sycl::half)
+MAKE_PreconditionOptimizer32bit2State(LION, sycl::ext::oneapi::bfloat16)
+MAKE_PreconditionOptimizer32bit2State(ADAGRAD, float)
+MAKE_PreconditionOptimizer32bit2State(ADAGRAD, sycl::half)
+MAKE_PreconditionOptimizer32bit2State(ADAGRAD, sycl::ext::oneapi::bfloat16)
 
 
 template SYCL_EXTERNAL void kOptimizer32bit2State<float, ADAM>(float* g, float* p, float* state1, float* state2, float *unorm, const float max_unorm, const float param_norm,
@@ -4181,6 +4197,54 @@ template SYCL_EXTERNAL void kOptimizer32bit2State<sycl::half, ADAM>(sycl::half* 
     const sycl::nd_item<3> &item_ct1,const sycl_la &tacc,const sycl::accessor<sycl::half, 1> &dacc_g,const sycl::accessor<sycl::half, 1> &dacc_p,const sycl_dacc_float &dacc_state1,const  sycl_dacc_float &dacc_state2, const sycl_dacc_float &dacc_unorm);
     
 template SYCL_EXTERNAL void kOptimizer32bit2State<sycl::ext::oneapi::bfloat16, ADAM>(sycl::ext::oneapi::bfloat16* g, sycl::ext::oneapi::bfloat16* p, float* state1, float* state2, float *unorm, const float max_unorm, const float param_norm,
+    const float beta1, const float beta2, const float eps, const float weight_decay,const int step, const float lr, const float gnorm_scale, const bool skip_zeros, const int n,
+    const sycl::nd_item<3> &item_ct1,const sycl_la &tacc,const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_g,const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_p,const sycl_dacc_float &dacc_state1,const  sycl_dacc_float &dacc_state2, const sycl_dacc_float &dacc_unorm);
+
+template SYCL_EXTERNAL void kOptimizer32bit2State<float, MOMENTUM>(float* g, float* p, float* state1, float* state2, float *unorm, const float max_unorm, const float param_norm,
+    const float beta1, const float beta2, const float eps, const float weight_decay,const int step, const float lr, const float gnorm_scale, const bool skip_zeros, const int n,
+    const sycl::nd_item<3> &item_ct1, const sycl_la &tacc, const sycl::accessor<float, 1> &dacc_g, const sycl::accessor<float, 1> &dacc_p, const sycl_dacc_float &dacc_state1, const  sycl_dacc_float &dacc_state2, const sycl_dacc_float &dacc_unorm);
+
+template SYCL_EXTERNAL void kOptimizer32bit2State<sycl::half, MOMENTUM>(sycl::half* g, sycl::half* p, float* state1, float* state2, float *unorm, const float max_unorm, const float param_norm,
+    const float beta1, const float beta2, const float eps, const float weight_decay,const int step, const float lr, const float gnorm_scale, const bool skip_zeros, const int n,
+    const sycl::nd_item<3> &item_ct1,const sycl_la &tacc,const sycl::accessor<sycl::half, 1> &dacc_g,const sycl::accessor<sycl::half, 1> &dacc_p,const sycl_dacc_float &dacc_state1,const  sycl_dacc_float &dacc_state2, const sycl_dacc_float &dacc_unorm);
+
+template SYCL_EXTERNAL void kOptimizer32bit2State<sycl::ext::oneapi::bfloat16, MOMENTUM>(sycl::ext::oneapi::bfloat16* g, sycl::ext::oneapi::bfloat16* p, float* state1, float* state2, float *unorm, const float max_unorm, const float param_norm,
+    const float beta1, const float beta2, const float eps, const float weight_decay,const int step, const float lr, const float gnorm_scale, const bool skip_zeros, const int n,
+    const sycl::nd_item<3> &item_ct1,const sycl_la &tacc,const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_g,const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_p,const sycl_dacc_float &dacc_state1,const  sycl_dacc_float &dacc_state2, const sycl_dacc_float &dacc_unorm);
+
+template SYCL_EXTERNAL void kOptimizer32bit2State<float, RMSPROP>(float* g, float* p, float* state1, float* state2, float *unorm, const float max_unorm, const float param_norm,
+    const float beta1, const float beta2, const float eps, const float weight_decay,const int step, const float lr, const float gnorm_scale, const bool skip_zeros, const int n,
+    const sycl::nd_item<3> &item_ct1, const sycl_la &tacc, const sycl::accessor<float, 1> &dacc_g, const sycl::accessor<float, 1> &dacc_p, const sycl_dacc_float &dacc_state1, const  sycl_dacc_float &dacc_state2, const sycl_dacc_float &dacc_unorm);
+
+template SYCL_EXTERNAL void kOptimizer32bit2State<sycl::half, RMSPROP>(sycl::half* g, sycl::half* p, float* state1, float* state2, float *unorm, const float max_unorm, const float param_norm,
+    const float beta1, const float beta2, const float eps, const float weight_decay,const int step, const float lr, const float gnorm_scale, const bool skip_zeros, const int n,
+    const sycl::nd_item<3> &item_ct1,const sycl_la &tacc,const sycl::accessor<sycl::half, 1> &dacc_g,const sycl::accessor<sycl::half, 1> &dacc_p,const sycl_dacc_float &dacc_state1,const  sycl_dacc_float &dacc_state2, const sycl_dacc_float &dacc_unorm);
+
+template SYCL_EXTERNAL void kOptimizer32bit2State<sycl::ext::oneapi::bfloat16, RMSPROP>(sycl::ext::oneapi::bfloat16* g, sycl::ext::oneapi::bfloat16* p, float* state1, float* state2, float *unorm, const float max_unorm, const float param_norm,
+    const float beta1, const float beta2, const float eps, const float weight_decay,const int step, const float lr, const float gnorm_scale, const bool skip_zeros, const int n,
+    const sycl::nd_item<3> &item_ct1,const sycl_la &tacc,const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_g,const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_p,const sycl_dacc_float &dacc_state1,const  sycl_dacc_float &dacc_state2, const sycl_dacc_float &dacc_unorm);
+
+template SYCL_EXTERNAL void kOptimizer32bit2State<float, LION>(float* g, float* p, float* state1, float* state2, float *unorm, const float max_unorm, const float param_norm,
+    const float beta1, const float beta2, const float eps, const float weight_decay,const int step, const float lr, const float gnorm_scale, const bool skip_zeros, const int n,
+    const sycl::nd_item<3> &item_ct1, const sycl_la &tacc, const sycl::accessor<float, 1> &dacc_g, const sycl::accessor<float, 1> &dacc_p, const sycl_dacc_float &dacc_state1, const  sycl_dacc_float &dacc_state2, const sycl_dacc_float &dacc_unorm);
+
+template SYCL_EXTERNAL void kOptimizer32bit2State<sycl::half, LION>(sycl::half* g, sycl::half* p, float* state1, float* state2, float *unorm, const float max_unorm, const float param_norm,
+    const float beta1, const float beta2, const float eps, const float weight_decay,const int step, const float lr, const float gnorm_scale, const bool skip_zeros, const int n,
+    const sycl::nd_item<3> &item_ct1,const sycl_la &tacc,const sycl::accessor<sycl::half, 1> &dacc_g,const sycl::accessor<sycl::half, 1> &dacc_p,const sycl_dacc_float &dacc_state1,const  sycl_dacc_float &dacc_state2, const sycl_dacc_float &dacc_unorm);
+
+template SYCL_EXTERNAL void kOptimizer32bit2State<sycl::ext::oneapi::bfloat16, LION>(sycl::ext::oneapi::bfloat16* g, sycl::ext::oneapi::bfloat16* p, float* state1, float* state2, float *unorm, const float max_unorm, const float param_norm,
+    const float beta1, const float beta2, const float eps, const float weight_decay,const int step, const float lr, const float gnorm_scale, const bool skip_zeros, const int n,
+    const sycl::nd_item<3> &item_ct1,const sycl_la &tacc,const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_g,const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_p,const sycl_dacc_float &dacc_state1,const  sycl_dacc_float &dacc_state2, const sycl_dacc_float &dacc_unorm);
+
+template SYCL_EXTERNAL void kOptimizer32bit2State<float, ADAGRAD>(float* g, float* p, float* state1, float* state2, float *unorm, const float max_unorm, const float param_norm,
+    const float beta1, const float beta2, const float eps, const float weight_decay,const int step, const float lr, const float gnorm_scale, const bool skip_zeros, const int n,
+    const sycl::nd_item<3> &item_ct1, const sycl_la &tacc, const sycl::accessor<float, 1> &dacc_g, const sycl::accessor<float, 1> &dacc_p, const sycl_dacc_float &dacc_state1, const  sycl_dacc_float &dacc_state2, const sycl_dacc_float &dacc_unorm);
+
+template SYCL_EXTERNAL void kOptimizer32bit2State<sycl::half, ADAGRAD>(sycl::half* g, sycl::half* p, float* state1, float* state2, float *unorm, const float max_unorm, const float param_norm,
+    const float beta1, const float beta2, const float eps, const float weight_decay,const int step, const float lr, const float gnorm_scale, const bool skip_zeros, const int n,
+    const sycl::nd_item<3> &item_ct1,const sycl_la &tacc,const sycl::accessor<sycl::half, 1> &dacc_g,const sycl::accessor<sycl::half, 1> &dacc_p,const sycl_dacc_float &dacc_state1,const  sycl_dacc_float &dacc_state2, const sycl_dacc_float &dacc_unorm);
+
+template SYCL_EXTERNAL void kOptimizer32bit2State<sycl::ext::oneapi::bfloat16, ADAGRAD>(sycl::ext::oneapi::bfloat16* g, sycl::ext::oneapi::bfloat16* p, float* state1, float* state2, float *unorm, const float max_unorm, const float param_norm,
     const float beta1, const float beta2, const float eps, const float weight_decay,const int step, const float lr, const float gnorm_scale, const bool skip_zeros, const int n,
     const sycl::nd_item<3> &item_ct1,const sycl_la &tacc,const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_g,const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_p,const sycl_dacc_float &dacc_state1,const  sycl_dacc_float &dacc_state2, const sycl_dacc_float &dacc_unorm);
 
@@ -4202,6 +4266,10 @@ MAKE_PreconditionStatic8bit1State(RMSPROP, sycl::half)
 MAKE_PreconditionStatic8bit1State(RMSPROP, float)
 MAKE_PreconditionStatic8bit1State(LION, sycl::half)
 MAKE_PreconditionStatic8bit1State(LION, float)
+MAKE_PreconditionStatic8bit1State(ADAM, sycl::half)
+MAKE_PreconditionStatic8bit1State(ADAM, float)
+MAKE_PreconditionStatic8bit1State(ADAGRAD, sycl::half)
+MAKE_PreconditionStatic8bit1State(ADAGRAD, float)
 
 #define MAKE_optimizerStatic8bit1State(oname, gtype) \
 template void kOptimizerStatic8bit1State<gtype, oname>(gtype* p, gtype* const g, unsigned char* state1,  \
@@ -4223,6 +4291,10 @@ MAKE_optimizerStatic8bit1State(RMSPROP, sycl::half)
 MAKE_optimizerStatic8bit1State(RMSPROP, float)
 MAKE_optimizerStatic8bit1State(LION, sycl::half)
 MAKE_optimizerStatic8bit1State(LION, float)
+MAKE_optimizerStatic8bit1State(ADAM, sycl::half)
+MAKE_optimizerStatic8bit1State(ADAM, float)
+MAKE_optimizerStatic8bit1State(ADAGRAD, sycl::half)
+MAKE_optimizerStatic8bit1State(ADAGRAD, float)
 
 #define MAKE_PreconditionStatic8bit2State(oname, gtype) \
 template void kPreconditionOptimizerStatic8bit2State<gtype, oname>(gtype* p, gtype* __restrict__ const g, unsigned char*__restrict__  const state1, unsigned char* __restrict__ const state2, \
@@ -4234,8 +4306,16 @@ template void kPreconditionOptimizerStatic8bit2State<gtype, oname>(gtype* p, gty
                 const float gnorm_scale,  \
                 const int n, const sycl::nd_item<3> &item_ct1,  float *smem_quantiles1, float *smem_quantiles2, const sycl_la &tacc, const sycl::accessor<gtype, 1> &dacc_g, const sycl_dacc_uc &dacc_state1, const sycl_dacc_uc &dacc_state2); \
 
+MAKE_PreconditionStatic8bit2State(MOMENTUM, sycl::half)
+MAKE_PreconditionStatic8bit2State(MOMENTUM, float)
+MAKE_PreconditionStatic8bit2State(RMSPROP, sycl::half)
+MAKE_PreconditionStatic8bit2State(RMSPROP, float)
 MAKE_PreconditionStatic8bit2State(ADAM, sycl::half)
 MAKE_PreconditionStatic8bit2State(ADAM, float)
+MAKE_PreconditionStatic8bit2State(LION, sycl::half)
+MAKE_PreconditionStatic8bit2State(LION, float)
+MAKE_PreconditionStatic8bit2State(ADAGRAD, sycl::half)
+MAKE_PreconditionStatic8bit2State(ADAGRAD, float)
 
 #define MAKE_optimizerStatic8bit2State(oname, gtype) \
 template void kOptimizerStatic8bit2State<gtype, oname>(gtype* p, gtype* const g, unsigned char* state1, unsigned char* state2, \
@@ -4248,8 +4328,16 @@ template void kOptimizerStatic8bit2State<gtype, oname>(gtype* p, gtype* const g,
                 const float gnorm_scale,  \
                 const int n, const sycl::nd_item<3> &item_ct1, float *smem_quantiles1, float *smem_quantiles2, const sycl_la &tacc, const sycl::accessor<gtype, 1> &dacc_g, const sycl::accessor<gtype, 1> &dacc_p, const sycl_dacc_uc &dacc_state1, const sycl_dacc_uc &dacc_state2); \
 
+MAKE_optimizerStatic8bit2State(MOMENTUM, sycl::half)
+MAKE_optimizerStatic8bit2State(MOMENTUM, float)
+MAKE_optimizerStatic8bit2State(RMSPROP, sycl::half)
+MAKE_optimizerStatic8bit2State(RMSPROP, float)
 MAKE_optimizerStatic8bit2State(ADAM, sycl::half)
 MAKE_optimizerStatic8bit2State(ADAM, float)
+MAKE_optimizerStatic8bit2State(LION, sycl::half)
+MAKE_optimizerStatic8bit2State(LION, float)
+MAKE_optimizerStatic8bit2State(ADAGRAD, sycl::half)
+MAKE_optimizerStatic8bit2State(ADAGRAD, float)
 
 template SYCL_EXTERNAL void kPercentileClipping<float, 2048, 4>(float * __restrict__ g, float *gnorm_vec, int step, const int n,
                                                   const sycl::nd_item<3> &item_ct1, const sycl_la &tacc, const sycl::accessor<float, 1> &dacc_g);
@@ -4364,6 +4452,15 @@ template void kOptimizerStatic8bit2StateBlockwise<gtype, oname, block_size, num_
 MAKE_OptimizerStatic8bit2StateBlockwise(ADAM, float, 2048, 8)
 MAKE_OptimizerStatic8bit2StateBlockwise(ADAM, sycl::half, 2048, 8)
 MAKE_OptimizerStatic8bit2StateBlockwise(ADAM, sycl::ext::oneapi::bfloat16, 2048, 8)
+MAKE_OptimizerStatic8bit2StateBlockwise(MOMENTUM, float, 2048, 8)
+MAKE_OptimizerStatic8bit2StateBlockwise(MOMENTUM, sycl::half, 2048, 8)
+MAKE_OptimizerStatic8bit2StateBlockwise(RMSPROP, float, 2048, 8)
+MAKE_OptimizerStatic8bit2StateBlockwise(RMSPROP, sycl::half, 2048, 8)
+MAKE_OptimizerStatic8bit2StateBlockwise(LION, float, 2048, 8)
+MAKE_OptimizerStatic8bit2StateBlockwise(LION, sycl::half, 2048, 8)
+MAKE_OptimizerStatic8bit2StateBlockwise(LION, sycl::ext::oneapi::bfloat16, 2048, 8)
+MAKE_OptimizerStatic8bit2StateBlockwise(ADAGRAD, float, 2048, 8)
+MAKE_OptimizerStatic8bit2StateBlockwise(ADAGRAD, sycl::half, 2048, 8)
 
 
 #define MAKE_OptimizerStatic8bit1StateBlockwise(oname, gtype, block_size, num_per_thread) \
@@ -4383,6 +4480,7 @@ template void kOptimizerStatic8bit1StateBlockwise<gtype, oname, block_size, num_
 
 MAKE_OptimizerStatic8bit1StateBlockwise(MOMENTUM, float, 2048, 8)
 MAKE_OptimizerStatic8bit1StateBlockwise(MOMENTUM, sycl::half, 2048, 8)
+MAKE_OptimizerStatic8bit1StateBlockwise(MOMENTUM, sycl::ext::oneapi::bfloat16, 2048, 8)
 MAKE_OptimizerStatic8bit1StateBlockwise(RMSPROP, float, 2048, 8)
 MAKE_OptimizerStatic8bit1StateBlockwise(RMSPROP, sycl::half, 2048, 8)
 MAKE_OptimizerStatic8bit1StateBlockwise(LION, float, 2048, 8)
@@ -4390,3 +4488,6 @@ MAKE_OptimizerStatic8bit1StateBlockwise(LION, sycl::half, 2048, 8)
 MAKE_OptimizerStatic8bit1StateBlockwise(LION, sycl::ext::oneapi::bfloat16, 2048, 8)
 MAKE_OptimizerStatic8bit1StateBlockwise(ADAGRAD, float, 2048, 8)
 MAKE_OptimizerStatic8bit1StateBlockwise(ADAGRAD, sycl::half, 2048, 8)
+MAKE_OptimizerStatic8bit1StateBlockwise(ADAM, float, 2048, 8)
+MAKE_OptimizerStatic8bit1StateBlockwise(ADAM, sycl::half, 2048, 8)
+MAKE_OptimizerStatic8bit1StateBlockwise(ADAM, sycl::ext::oneapi::bfloat16, 2048, 8)
