@@ -9,6 +9,7 @@
 #include <dpct/dpct.hpp>
 #include <dpct/dpl_extras/dpcpp_extensions.h>
 #include "kernel_quant.h"
+#include "common_templates.h"
 #include <dpct/dpl_utils.hpp>
 //#include <mma.h>
 #include <cmath>

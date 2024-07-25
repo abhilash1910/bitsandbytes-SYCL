@@ -9,6 +9,7 @@
 #include <dpct/dpct.hpp>
 #include <dpct/dpl_extras/dpcpp_extensions.h>
 #include "ops.h"
+#include "common_templates.h"
 #include "kernel_quant.h"
 #include <limits>
 #include <BinSearch.h>
@@ -37,13 +38,15 @@ using namespace BinSearch;
 using std::cout;
 using std::endl;
 
+/*
 int fill_up_to_nearest_multiple(int value, int multiple)
 {
   return value + (value % multiple == 0 ? 0 : (multiple - (value % multiple)));
 }
-
+*/
 /// Load linear segment items into block format across threads
 /// Helper for Block Load
+
 namespace dpct{
 namespace group{
 enum load_algorithm {
@@ -1317,7 +1320,7 @@ void dequant_mm_int32_fp16(int *A, float *rowStats, float *colStats, sycl::half 
 }
 
 //==================================func===========================
-
+/*
 template <typename T, int FUNC> void func(T *A, T *B, T value, long n)
 {
   int threads = 512;
@@ -1335,7 +1338,7 @@ template <typename T, int FUNC> void func(T *A, T *B, T value, long n)
     });
   });
   
-}
+}*/
 //========================GEMM============================
 
 
@@ -1530,7 +1533,7 @@ void doubleRowColQuant(sycl::half * A, float *rowStats, float *colStats, char *o
 }
 
 //======================================= transform row to format===============================================
-
+/*
 template <int FORMAT, int TRANSPOSE> void transformRowToFormat(char * A, char *out, int rows, int cols)
 {
   
@@ -1635,7 +1638,7 @@ template <int FORMAT> void extractOutliers(char * A, int *idx, char *out, int id
            kExtractOutliers<FORMAT>(A, idx, out, idx_size, rows, cols, tiledRows, tiledCols, item_ct1);
     });
    });
-}
+}*/
 //==============================================================
 //                   TEMPLATE DEFINITIONS
 //==============================================================

@@ -7,6 +7,7 @@
 #include <dpct/dpct.hpp>
 #include <float.h>
 #include "ops.h"
+#include "common_templates.h"
 
 #ifndef kernels
 #define kernels
