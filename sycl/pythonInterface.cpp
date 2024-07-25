@@ -6,7 +6,7 @@
 #include <ops.h>
 #include <cpu_ops.h>
 #include <sycl/sycl.hpp>
-
+#include "sycl/sycl_code/common_templates.h"
 // We cannot call templated code from C, so we wrap the template in a C compatible call here if necessary.
 // We use macro functions to expand all the different optimizers. Looks ugly, and is ugly, but its better than to
 // maintain all that boilerplate
