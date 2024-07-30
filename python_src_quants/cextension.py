@@ -66,7 +66,7 @@ def get_sycl_bnb_library_path() -> Path:
 
 class BNBNativeLibrary:
     _lib: ct.CDLL
-    compiled_with_sycl= False
+    compiled_with_sycl= True
 
     def __init__(self, lib: ct.CDLL):
         self._lib = lib
@@ -76,20 +76,21 @@ class BNBNativeLibrary:
 
 
 class SYCLBNBNativeLibrary(BNBNativeLibrary):
-    compiled_with_sycl = True
-
+    
     def __init__(self, lib: ct.CDLL):
         super().__init__(lib)
         lib.get_context.restype = ct.c_void_p
         lib.get_cusparse.restype = ct.c_void_p
         lib.cget_managed_ptr.restype = ct.c_void_p
+        self.compiled_with_sycl = True
 
 
-def get_native_library() -> BNBNativeLibrary:
+def get_native_library() -> SYCLBNBNativeLibrary:
     binary_path = PACKAGE_DIR / f"libbitsandbytes_sycl.so"
     sycl_binary_path = binary_path
     print(sycl_binary_path)
     binary_path = "bitsandbytes/libbitsandbytes_sycl.so"  #change this to abs path
+    os.environ['LD_LIBRARY_PATH'] = os.path.dirname(binary_path) + ":" + os.environ.get('LD_LIBRARY_PATH', '')
     """
     if sycl_binary_path.exists():
         binary_path = sycl_binary_path

@@ -12,11 +12,11 @@ import numpy as np
 import torch
 from torch import Tensor
 
-from utils import pack_dict_to_tensor, unpack_tensor_to_dict
+from python_src_quants.utils import pack_dict_to_tensor, unpack_tensor_to_dict
 
-from cextension import lib
+from .cextension import lib
 
-
+import intel_extension_for_pytorch
 # math.prod not compatible with python < 3.8
 def prod(iterable):
     return reduce(operator.mul, iterable, 1)
@@ -24,7 +24,7 @@ def prod(iterable):
 
 name2qmap = {}
 
-if lib and lib.compiled_with_cuda:
+if lib and lib.compiled_with_sycl:
     """C FUNCTIONS FOR OPTIMIZERS"""
     str2optimizer32bit = {
         "adam": (
@@ -410,7 +410,7 @@ def create_quantile_map(A, total_bits=8):
 def get_special_format_str():
     if not torch.xpu.is_available():
         return "col_turing"
-    major, _minor = torch.xpu.get_device_capability()
+    major, _minor = 6,4
     if major <= 7:
         return "col_turing"
     if major == 8:

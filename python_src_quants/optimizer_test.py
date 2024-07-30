@@ -9,9 +9,9 @@ import os
 import torch
 import torch.distributed as dist
 
-import .functional as F
-from .optimizer import Optimizer2State
-
+import functional as F
+from optimizer import Optimizer2State
+import intel_extension_for_pytorch
 
 class Adam(Optimizer2State):
     def __init__(

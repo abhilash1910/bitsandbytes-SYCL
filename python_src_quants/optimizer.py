@@ -8,7 +8,7 @@ from itertools import chain
 
 import torch
 
-import .functional as F
+import functional as F
 
 
 class MockArgs:
@@ -285,11 +285,17 @@ class Optimizer8bit(torch.optim.Optimizer):
 
                 self.prefetch_state(p)
                 self.update_step(group, p, gindex, pindex)
-                torch.cuda.synchronize()
+                if torch.xpu.is_available():
+                    torch.xpu.synchronize()
+                else:
+                  torch.cuda.synchronize()
         if self.is_paged:
             # all paged operation are asynchronous, we need
             # to sync to make sure all tensors are in the right state
-            torch.cuda.synchronize()
+            if torch.xpu.is_available():
+                torch.xpu.synchronize()
+            else:
+                torch.cuda.synchronize()
 
         return loss
 
