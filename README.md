@@ -14,12 +14,12 @@ icpx -fsycl <kernel.cpp> -o <kernel_out.o> -ldnnl
 Running the end to end optimizer for 4/8 quants:
 
 ```bash
-For compilation on INTEL GPU (from tests/ folder):
+For compilation on INTEL GPU :
 $ export BUILD_SYCL=1
 $ cmake -DCMAKE_CXX_COMPILER=icpx -DSYCL_TARGET=INTEL -DCMAKE_C_COMPILER=icx -DCOMPUTE_BACKEND=sycl
 $ cmake –build . –config Release
 
-For compilation on NVIDIA GPU (from tests/ folder):
+For compilation on NVIDIA GPU :
 $ export BUILD_SYCL=1
 $ cmake -DCMAKE_CXX_COMPILER=icpx -DSYCL_TARGET=NVIDIA -DCMAKE_C_COMPILER=icx -DCOMPUTE_BACKEND=sycl
 $ cmake –build . –config Release
