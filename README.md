@@ -34,6 +34,7 @@ $python setup.py install
 
 
 Once done, it will create a python package named : python_src_quants (which is bitsandbytes renamed differently)
+The next step involves testing on iGPU (pvc) only .
 Navigate to ../bitsandbytes_sycl_samples/tests_pvc folder
 
 ```bash
