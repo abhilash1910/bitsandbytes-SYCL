@@ -16,7 +16,7 @@ from python_src_quants.utils import pack_dict_to_tensor, unpack_tensor_to_dict
 
 from .cextension import lib
 
-import intel_extension_for_pytorch
+
 # math.prod not compatible with python < 3.8
 def prod(iterable):
     return reduce(operator.mul, iterable, 1)
@@ -150,10 +150,10 @@ class CUBLAS_Context:
 
     def get_context(self, device):
         if device.index not in self.context:
-            prev_device = torch.xpu.current_device()
-            torch.xpu.set_device(device)
+            prev_device = torch.cuda.current_device()
+            torch.cuda.set_device(device)
             self.context[device.index] = ct.c_void_p(lib.get_context())
-            torch.xpu.set_device(prev_device)
+            torch.cuda.set_device(prev_device)
         return self.context[device.index]
 
 
@@ -181,13 +181,13 @@ dtype2bytes[torch.bfloat16] = 2
 dtype2bytes[torch.uint8] = 1
 dtype2bytes[torch.int8] = 1
 
-FIRST_CUDA_DEVICE = torch.device("xpu", index=0)
+FIRST_CUDA_DEVICE = torch.device("cuda", index=0)
 
 
 def get_paged(*shape, dtype=torch.float32, device=FIRST_CUDA_DEVICE):
     num_bytes = dtype2bytes[dtype] * prod(shape)
-    sycl_ptr = lib.cget_managed_ptr(ct.c_size_t(num_bytes))
-    c_ptr = ct.cast(sycl_ptr, ct.POINTER(ct.c_int))
+    cuda_ptr = lib.cget_managed_ptr(ct.c_size_t(num_bytes))
+    c_ptr = ct.cast(cuda_ptr, ct.POINTER(ct.c_int))
     new_array = np.ctypeslib.as_array(c_ptr, shape=shape)
     out = torch.frombuffer(new_array, dtype=dtype, count=prod(shape)).view(shape)
     out.is_paged = True
@@ -230,7 +230,7 @@ def elementwise_func(func_name, A, B, value, prefetch=True):
         # if we return from this function, we want to the tensor
         # to be in the correct state, that is the final state after the
         # operation occurred. So we synchronize.
-        torch.xpu.synchronize()
+        torch.cuda.synchronize()
 
 
 def fill(A, value, device=None, prefetch=True):
@@ -408,9 +408,9 @@ def create_quantile_map(A, total_bits=8):
 
 
 def get_special_format_str():
-    if not torch.xpu.is_available():
+    if not torch.cuda.is_available():
         return "col_turing"
-    major, _minor = 6,4
+    major, _minor = torch.cuda.get_device_capability()
     if major <= 7:
         return "col_turing"
     if major == 8:
@@ -425,7 +425,7 @@ def is_on_gpu(tensors):
         if t is None:
             continue  # NULL pointers are fine
         is_paged = getattr(t, "is_paged", False)
-        on_gpu &= t.device.type == "xpu" or is_paged
+        on_gpu &= t.device.type == "cuda" or is_paged
         if not is_paged:
             gpu_ids.add(t.device.index)
     if not on_gpu:
@@ -459,13 +459,13 @@ def get_ptr(A: Optional[Tensor]) -> Optional[ct.c_void_p]:
 
 
 def pre_call(device):
-    prev_device = torch.xpu.current_device()
-    torch.xpu.set_device(device)
+    prev_device = torch.cuda.current_device()
+    torch.cuda.set_device(device)
     return prev_device
 
 
 def post_call(prev_device):
-    torch.xpu.set_device(prev_device)
+    torch.cuda.set_device(prev_device)
 
 
 def get_transform_func(dtype, orderA, orderOut, transpose=False):
@@ -1019,7 +1019,7 @@ def dequantize_blockwise(
 
 def get_4bit_type(typename, device=None, blocksize=64):
     if device is None:
-        device = "xpu"
+        device = "cuda"
     data = None
     if typename == "nf4":
         """ Implements the NF4 data type.
@@ -1155,7 +1155,7 @@ def quantize_4bit(
     tuple(torch.Tensor, torch.Size, torch.dtype, int):
         The quantization state to undo the quantization.
     """
-    if A.device.type != "xpu":
+    if A.device.type != "cuda":
         raise NotImplementedError(f"Device type not supported for FP4 quantization: {A.device.type}")
     if quant_type not in ["fp4", "nf4"]:
         raise NotImplementedError(f"4-bit quantization data type {quant_type} is not implemented.")
@@ -1863,20 +1863,20 @@ def histogram_scatter_add_2d(histogram: Tensor, index1: Tensor, index2: Tensor, 
     assert index1.dtype == torch.int32
     assert index2.dtype == torch.int32
 
-    assert histogram.device.type == "xpu"
-    assert index1.device.type == "xpu"
-    assert index2.device.type == "xpu"
-    assert source.device.type == "xpu"
+    assert histogram.device.type == "cuda"
+    assert index1.device.type == "cuda"
+    assert index2.device.type == "cuda"
+    assert source.device.type == "cuda"
 
     maxdim1 = ct.c_int32(histogram.shape[0])
     n = ct.c_int32(index1.numel())
     is_on_gpu([histogram, index1, index2, source])
     lib.chistogram_scatter_add_2d(get_ptr(histogram), get_ptr(index1), get_ptr(index2), get_ptr(source), maxdim1, n)
 
-"""
+
 def check_matmul(A, B, out, transposed_A, transposed_B, expected_type=torch.int8):
-    if not torch.xpu.is_initialized():
-        torch.xpu.init()
+    if not torch.cuda.is_initialized():
+        torch.cuda.init()
     if A.dtype != expected_type or B.dtype != expected_type:
         raise TypeError(f"Expected torch.int8 input tensors A and B, but got {A.dtype} and {B.dtype}")
 
@@ -2283,8 +2283,8 @@ def igemmlt(A, B, SA, SB, out=None, Sout=None, dtype=torch.int32):
         out, Sout = get_transform_buffer((shapeA[0], shapeA[1], shapeB[0]), dtype, A.device, "col32", "row")
 
     assert dimsB != 3, "len(B.shape)==3 not supported"
-    assert A.device.type == "xpu"
-    assert B.device.type == "xpu"
+    assert A.device.type == "cuda"
+    assert B.device.type == "cuda"
     assert A.dtype == torch.int8
     assert B.dtype == torch.int8
     assert out.dtype == dtype
@@ -2296,7 +2296,7 @@ def igemmlt(A, B, SA, SB, out=None, Sout=None, dtype=torch.int32):
     ), f"Matmullt only supports A @ B^T. Inner matrix dimensions do not match: A @ B = {shapeA} @ {shapeB}"
     formatB = SB[1]
     prev_device = A.device
-    torch.xpu.set_device(A.device)
+    torch.cuda.set_device(A.device)
 
     ptr = CUBLAS_Context.get_instance().get_context(A.device)
     ptrA = get_ptr(A)
@@ -2340,11 +2340,11 @@ def igemmlt(A, B, SA, SB, out=None, Sout=None, dtype=torch.int32):
         print(f"A: {shapeA}, B: {shapeB}, C: {Sout[0]}; (lda, ldb, ldc): {(lda, ldb, ldc)}; (m, n, k): {(m, n, k)}")
         raise Exception("cublasLt ran into an error!")
 
-    torch.xpu.set_device(prev_device)
+    torch.cuda.set_device(prev_device)
 
     return out, Sout
 
-"""
+
 def mm_dequant(A, quant_state, row_stats, col_stats, out=None, new_row_stats=None, new_col_stats=None, bias=None):
     assert A.dtype == torch.int32
     if bias is not None:
@@ -2427,7 +2427,7 @@ def get_colrow_absmax(A, row_stats=None, col_stats=None, nnz_block_ptr=None, thr
 
     return row_stats, col_stats, nnz_block_ptr
 
-"""
+
 class COOSparseTensor:
     def __init__(self, rows, cols, nnz, rowidx, colidx, values):
         assert rowidx.dtype == torch.int32
@@ -2510,7 +2510,7 @@ def coo_zeros(rows, cols, nnz, device, dtype=torch.half):
 def double_quant(A, col_stats=None, row_stats=None, out_col=None, out_row=None, threshold=0.0):
     device = A.device
     assert A.dtype == torch.half
-    assert device.type == "xpu"
+    assert device.type == "cuda"
     prev_device = pre_call(A.device)
 
     cols = A.shape[-1]
@@ -2595,7 +2595,7 @@ def double_quant(A, col_stats=None, row_stats=None, out_col=None, out_row=None, 
     post_call(prev_device)
 
     return out_row, out_col, row_stats, col_stats, coo_tensor
-"""
+
 
 def transform(A, to_order, from_order="row", out=None, transpose=False, state=None, ld=None):
     prev_device = pre_call(A.device)
@@ -2907,7 +2907,7 @@ def extract_outliers(A, SA, idx):
     shapeA = SA[0]
     formatA = SA[1]
     assert formatA in ["col_turing", "col_ampere"]
-    assert A.device.type == "xpu"
+    assert A.device.type == "cuda"
 
     out = torch.zeros((shapeA[0], idx.numel()), dtype=torch.int8, device=A.device)
 
