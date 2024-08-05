@@ -3,8 +3,8 @@ import intel_extension_for_pytorch
 import python_src_quants as bnb
 import python_src_quants.functional
 
-p = torch.nn.Parameter(torch.rand(10, 10).to("xpu"))
-a = torch.rand(10, 10).xpu()
+p = torch.nn.Parameter(torch.rand(10, 10).to("cuda"))
+a = torch.rand(10, 10).cuda()
 
 p1 = p.data.sum().item()
 
