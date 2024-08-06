@@ -27,6 +27,7 @@
 /// Helper for Block Load
 namespace dpct{
 namespace group{
+/*
 enum load_algorithm {
 
   BLOCK_LOAD_DIRECT,
@@ -129,7 +130,7 @@ private:
 
 
 
-
+*/
 
 
 
