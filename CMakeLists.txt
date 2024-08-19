@@ -28,7 +28,7 @@ set(CPP_FILES sycl/common.cpp sycl/cpu_ops.cpp sycl/pythonInterface.cpp)
 #set(CUDA_FILES csrc/ops.cu csrc/kernels.cu)
 #set(MPS_FILES csrc/mps_ops.mm)
 #set(METAL_FILES csrc/mps_kernels.metal)
-set(SYCL_FILES  sycl/sycl_code/kernel_quant.cpp sycl/sycl_code/op_quant.cpp) 
+set(SYCL_FILES  sycl/sycl_code/kernel_quant.cpp sycl/sycl_code/op_quant.cpp sycl/sycl_code/op_gemm.cpp sycl/sycl_code/kernel_gemm.cpp) 
 
 # C++ sources are always included
 list(APPEND SRC_FILES ${CPP_FILES})
