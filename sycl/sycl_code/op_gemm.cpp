@@ -600,17 +600,45 @@ template <typename T, int BITS> void gemm_4bit_inference_naive(int m, int n, int
 template <typename T, int BITS> void spmm_coo_very_sparse_naive(int *max_count, int *max_idx, int *offset_rowidx, int *rowidx, int *colidx, sycl::half *values, T *B, sycl::half *out, float *dequant_stats, int nnz_rows, int nnz, int rowsA, int rowsB, int colsB)
 {
 
+  dpct::device_ext &dev_ct1 = dpct::get_current_device();
+  sycl::queue &q_ct1 = dev_ct1.in_order_queue();
+  sycl::context ctx = q_ct1.get_context();
+	int size = NUM_BLOCK;
+  
+  sycl::buffer<int, 1> buff_max_count(max_count,sycl::range<1>(size));
+  sycl::buffer<int, 1> buff_max_idx(max_idx,sycl::range<1>(size));
+  sycl::buffer<int, 1> buff_offset_rowidx(offset_rowidx,sycl::range<1>(size));
+  sycl::buffer<int, 1> buff_rowidx(rowidx,sycl::range<1>(size));
+  sycl::buffer<int, 1> buff_colidx(colidx,sycl::range<1>(size));
+  sycl::buffer<sycl::half, 1> buff_values(values,sycl::range<1>(size));
+  sycl::buffer<sycl::half, 1> buff_out(out,sycl::range<1>(size));
+  sycl::buffer<T, 1> buff_B(B, sycl::range<1>(size));
+  sycl::buffer<float, 1> buff_dequant_stats(dequant_stats,sycl::range<1>(size));
+  
+
   {
     dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp16});
-    dpct::get_in_order_queue().submit(
+    q_ct1.submit(
       [&](sycl::handler &cgh) {
         
+         sycl::accessor dacc_max_count(buff_max_count, cgh, sycl::read_write);
+         sycl::accessor dacc_max_idx(buff_max_idx, cgh, sycl::read_write);
+         sycl::accessor dacc_offset_rowidx(buff_offset_rowidx, cgh, sycl::read_write);
+         sycl::accessor dacc_colidx(buff_colidx, cgh, sycl::read_write);
+         sycl::accessor dacc_rowidx(buff_rowidx, cgh, sycl::read_write);
+         sycl::accessor dacc_values(buff_values, cgh, sycl::read_write);
+         sycl::accessor dacc_out(buff_out, cgh, sycl::read_write);
+         sycl::accessor dacc_dequant_stats(buff_dequant_stats, cgh, sycl::read_write);
+         sycl::accessor dacc_B(buff_B, cgh, sycl::read_write);
+         
+        
+        //smem
         sycl::local_accessor<sycl::half, 1> smem_dequant_stats_acc_ct1(sycl::range<1>(2048/*SMEM_SIZE*/), cgh);
-
+   
         cgh.parallel_for(
           sycl::nd_range<3>(sycl::range<3>(1, 1, nnz_rows) * sycl::range<3>(1, 1, 256), sycl::range<3>(1, 1, 256)), 
           [=](sycl::nd_item<3> item_ct1) {
-            kspmm_coo_very_sparse_naive<T, 8, BITS>(max_count, max_idx, offset_rowidx, rowidx, colidx, values, B, out, dequant_stats, nnz, rowsA, rowsB, colsB, item_ct1, smem_dequant_stats_acc_ct1.get_pointer());
+            kspmm_coo_very_sparse_naive<T, 8, BITS>(max_count, max_idx, offset_rowidx, rowidx, colidx, values, B, out, dequant_stats, nnz, rowsA, rowsB, colsB, item_ct1, smem_dequant_stats_acc_ct1.get_pointer(), dacc_max_count, dacc_max_idx, dacc_offset_rowidx, dacc_rowidx, dacc_colidx, dacc_values, dacc_B, dacc_out, dacc_dequant_stats);
           });
       });
   }

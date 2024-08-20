@@ -1398,7 +1398,7 @@ template <typename T, int THREADS, int BITS> SYCL_EXTERNAL void kgemm_4bit_infer
 template <typename T, int SPMM_ITEMS, int BITS>
 
 SYCL_EXTERNAL void kspmm_coo_very_sparse_naive(int *max_count, int *max_idx, int *offset_rowidx, int *rowidx, int *colidx, sycl::half *values, T *B, sycl::half *out, float * __restrict__ const dequant_stats, int nnz, int rowsA, int rowsB, int colsB, const sycl::nd_item<3> &item_ct1,
- sycl::half *smem_dequant_stats)
+ sycl::half *smem_dequant_stats, const sycl_dacc &dacc_max_count, const sycl_dacc &dacc_max_idx, const sycl_dacc &dacc_offset_rowidx, const sycl_dacc &dacc_rowidx, const sycl_dacc &dacc_colidx, const sycl::accessor<sycl::half, 1> &dacc_values, const sycl::accessor<T, 1> &dacc_B, const sycl::accessor<sycl::half, 1> &dacc_out, const sycl_dacc_float &dacc_dequant_stats)
 {
 
   // 0. load balancing: We process rows with most columns first (count_vec)and we process one row per block
@@ -1412,10 +1412,11 @@ SYCL_EXTERNAL void kspmm_coo_very_sparse_naive(int *max_count, int *max_idx, int
   // 4. Do mma operations that accumulate into registers
   // 5. Each warp stores its output row into matrix C
 
-  const int count = max_count[item_ct1.get_group(2)];
-  const int local_max_idx = max_idx[item_ct1.get_group(2)];
-  const int offset = local_max_idx == 0 ? 0 : offset_rowidx[local_max_idx-1];
-  const int local_row_idx = rowidx[offset];
+  
+  const int count = dacc_max_count[item_ct1.get_group(2)];
+  const int local_max_idx = dacc_max_idx[item_ct1.get_group(2)];
+  const int offset = local_max_idx == 0 ? 0 : dacc_offset_rowidx[local_max_idx-1];
+  const int local_row_idx = dacc_rowidx[offset];
 
   const int warp_id = item_ct1.get_local_id(2) / 32;
   const int warp_idx = item_ct1.get_local_id(2) % 32;
@@ -1434,8 +1435,8 @@ SYCL_EXTERNAL void kspmm_coo_very_sparse_naive(int *max_count, int *max_idx, int
   // 2. Load A into registers
   for(int j = 0; j < MAX_SPARSE_COUNT; j++)
   {
-    local_valA[j] = j < count ? values[offset+j] : sycl::vec<float, 1>(0.0f).convert<sycl::half, sycl::rounding_mode::automatic>()[0];
-    local_colidxA[j] = j < count ? colidx[offset+j] : 0;
+    local_valA[j] = j < count ? dacc_values[offset+j] : sycl::vec<float, 1>(0.0f).convert<sycl::half, sycl::rounding_mode::automatic>()[0];
+    local_colidxA[j] = j < count ? dacc_colidx[offset+j] : 0;
   }
 
   // each thread processes SPMM_ITEMS=32 per iteration. We have 256 threads. 32*256=x192
@@ -1452,9 +1453,11 @@ SYCL_EXTERNAL void kspmm_coo_very_sparse_naive(int *max_count, int *max_idx, int
     {
       for(int i = item_ct1.get_local_id(2); i < SMEM_SIZE; i+=item_ct1.get_local_range(2))
         if((idx_col_B+i-local_idx_col_B_offset) < colsB)
-          smem_dequant_stats[i] = dequant_stats[idx_col_B+i-local_idx_col_B_offset];
+          smem_dequant_stats[i] = dacc_dequant_stats[idx_col_B+i-local_idx_col_B_offset];
 
-      
+      /*
+      DPCT1065:204: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+      */
       item_ct1.barrier(sycl::access::fence_space::local_space);
     }
 
@@ -1486,7 +1489,7 @@ SYCL_EXTERNAL void kspmm_coo_very_sparse_naive(int *max_count, int *max_idx, int
             #pragma unroll num_items
             for(int k = 0; k < num_items; k++)
               if(idx+k < colsB)
-                local_valsB[k] = B[row_offset+idx+k];
+                local_valsB[k] = dacc_B[row_offset+idx+k];
               else
                 local_valsB[k] = 0.0f;
           }
@@ -1533,7 +1536,7 @@ SYCL_EXTERNAL void kspmm_coo_very_sparse_naive(int *max_count, int *max_idx, int
         #pragma unroll num_items
         for(int k = 0; k < num_items; k++)
          if(idx_col_C + k < colsB)
-           out[idx_val+k] = (float)out[idx_val+k]+(float)local_valC[j+k];
+           dacc_out[idx_val+k] = (float)out[idx_val+k]+(float)local_valC[j+k];
       }
     }
 
@@ -1542,3 +1545,488 @@ SYCL_EXTERNAL void kspmm_coo_very_sparse_naive(int *max_count, int *max_idx, int
   }
 }
 
+//Template declarations
+
+//these are not used and make no sense, but the compiler needs them
+//template __global__ void gemm_device<float, 16, 128>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc);
+template SYCL_EXTERNAL void gemm_device<sycl::half, 32, 256>(int M, int N, int K, sycl::half * __restrict__ const A,  sycl::half* B,  sycl::half * out,  int lda, int ldb, int ldc,
+                                         const sycl::nd_item<3> &item_ct1,
+                                         sycl::half *smem_A, sycl::half *smem_B,
+                                         const sycl::accessor<sycl::half, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_out);
+                                         
+template SYCL_EXTERNAL void gemm_device<sycl::half, 32, 192>(int M, int N, int K, sycl::half * __restrict__ const A,  sycl::half* B,  sycl::half * out,  int lda, int ldb, int ldc,
+                                         const sycl::nd_item<3> &item_ct1,
+                                         sycl::half *smem_A, sycl::half *smem_B,
+                                         const sycl::accessor<sycl::half, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_out);
+                                         
+template SYCL_EXTERNAL void gemm_device<sycl::half, 32, 160>(int M, int N, int K, sycl::half * __restrict__ const A,  sycl::half* B,  sycl::half * out,  int lda, int ldb, int ldc,
+                                         const sycl::nd_item<3> &item_ct1,
+                                         sycl::half *smem_A, sycl::half *smem_B,
+                                         const sycl::accessor<sycl::half, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_out);
+template SYCL_EXTERNAL void gemm_device<sycl::half, 32, 128>(int M, int N, int K, sycl::half * __restrict__ const A,  sycl::half* B,  sycl::half * out,  int lda, int ldb, int ldc,
+                                         const sycl::nd_item<3> &item_ct1,
+                                         sycl::half *smem_A, sycl::half *smem_B,
+                                         const sycl::accessor<sycl::half, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_out);
+                                         
+//template __global__ void gemm_device<float, 16, 32>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc);
+template SYCL_EXTERNAL void gemm_device<sycl::half, 32, 32>(int M, int N, int K, sycl::half * __restrict__ const A,  sycl::half* B,  sycl::half * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::half *smem_A, sycl::half *smem_B,
+                                        const sycl::accessor<sycl::half, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_out);
+                                         
+template SYCL_EXTERNAL void gemm_device<sycl::half, 32, 64>(int M, int N, int K, sycl::half * __restrict__ const A,  sycl::half* B,  sycl::half * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::half *smem_A, sycl::half *smem_B,
+                                        const sycl::accessor<sycl::half, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_out);
+                                         
+template SYCL_EXTERNAL void gemm_device<sycl::half, 32, 96>(int M, int N, int K, sycl::half * __restrict__ const A,  sycl::half* B,  sycl::half * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::half *smem_A, sycl::half *smem_B,
+                                        const sycl::accessor<sycl::half, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_out);
+
+////
+
+template SYCL_EXTERNAL void gemm_device<float, 32, 256>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        float *smem_A, float *smem_B,
+                                        const sycl::accessor<float, 1> &dacc_A, 
+                                         const sycl::accessor<float, 1> &dacc_B, 
+                                         const sycl::accessor<float, 1> &dacc_out);
+                                         
+
+template SYCL_EXTERNAL void gemm_device<float, 32, 192>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        float *smem_A, float *smem_B,
+                                        const sycl::accessor<float, 1> &dacc_A, 
+                                         const sycl::accessor<float, 1> &dacc_B, 
+                                         const sycl::accessor<float, 1> &dacc_out);
+                                         
+
+template SYCL_EXTERNAL void gemm_device<float, 32, 160>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        float *smem_A, float *smem_B,
+                                        const sycl::accessor<float, 1> &dacc_A, 
+                                         const sycl::accessor<float, 1> &dacc_B, 
+                                         const sycl::accessor<float, 1> &dacc_out);
+
+template SYCL_EXTERNAL void gemm_device<float, 32, 128>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        float *smem_A, float *smem_B,
+                                        const sycl::accessor<float, 1> &dacc_A, 
+                                         const sycl::accessor<float, 1> &dacc_B, 
+                                         const sycl::accessor<float, 1> &dacc_out);
+                                         
+//template __global__ void gemm_device<float, 16, 32>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc);
+
+template SYCL_EXTERNAL void gemm_device<float, 32, 32>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        float *smem_A, float *smem_B,
+                                        const sycl::accessor<float, 1> &dacc_A, 
+                                         const sycl::accessor<float, 1> &dacc_B, 
+                                         const sycl::accessor<float, 1> &dacc_out);                                         
+
+template SYCL_EXTERNAL void gemm_device<float, 32, 64>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        float *smem_A, float *smem_B,
+                                        const sycl::accessor<float, 1> &dacc_A, 
+                                         const sycl::accessor<float, 1> &dacc_B, 
+                                         const sycl::accessor<float, 1> &dacc_out);                                         
+template SYCL_EXTERNAL void gemm_device<float, 32, 96>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        float *smem_A, float *smem_B,
+                                        const sycl::accessor<float, 1> &dacc_A, 
+                                         const sycl::accessor<float, 1> &dacc_B, 
+                                         const sycl::accessor<float, 1> &dacc_out);
+
+///
+template SYCL_EXTERNAL void gemm_device<sycl::ext::oneapi::bfloat16, 32, 256>(int M, int N, int K, sycl::ext::oneapi::bfloat16 * __restrict__ const A,  sycl::ext::oneapi::bfloat16* B,  sycl::ext::oneapi::bfloat16 * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::ext::oneapi::bfloat16 *smem_A, sycl::ext::oneapi::bfloat16 *smem_B,
+                                        const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_out);
+                                         
+
+template SYCL_EXTERNAL void gemm_device<sycl::ext::oneapi::bfloat16, 32, 192>(int M, int N, int K, sycl::ext::oneapi::bfloat16 * __restrict__ const A,  sycl::ext::oneapi::bfloat16* B,  sycl::ext::oneapi::bfloat16 * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::ext::oneapi::bfloat16 *smem_A, sycl::ext::oneapi::bfloat16 *smem_B,
+                                        const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_out);
+                                         
+
+template SYCL_EXTERNAL void gemm_device<sycl::ext::oneapi::bfloat16, 32, 160>(int M, int N, int K, sycl::ext::oneapi::bfloat16 * __restrict__ const A,  sycl::ext::oneapi::bfloat16* B,  sycl::ext::oneapi::bfloat16 * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::ext::oneapi::bfloat16 *smem_A, sycl::ext::oneapi::bfloat16 *smem_B,
+                                        const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_out);
+
+template SYCL_EXTERNAL void gemm_device<sycl::ext::oneapi::bfloat16, 32, 128>(int M, int N, int K, sycl::ext::oneapi::bfloat16 * __restrict__ const A,  sycl::ext::oneapi::bfloat16* B,  sycl::ext::oneapi::bfloat16 * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::ext::oneapi::bfloat16 *smem_A, sycl::ext::oneapi::bfloat16 *smem_B,
+                                        const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_out);
+                                         
+//template __global__ void gemm_device<float, 16, 32>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc);
+
+template SYCL_EXTERNAL void gemm_device<sycl::ext::oneapi::bfloat16, 32, 32>(int M, int N, int K, sycl::ext::oneapi::bfloat16 * __restrict__ const A,  sycl::ext::oneapi::bfloat16* B,  sycl::ext::oneapi::bfloat16 * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::ext::oneapi::bfloat16 *smem_A, sycl::ext::oneapi::bfloat16 *smem_B,
+                                        const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_out);
+template SYCL_EXTERNAL void gemm_device<sycl::ext::oneapi::bfloat16, 32, 64>(int M, int N, int K, sycl::ext::oneapi::bfloat16 * __restrict__ const A,  sycl::ext::oneapi::bfloat16* B,  sycl::ext::oneapi::bfloat16 * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::ext::oneapi::bfloat16 *smem_A, sycl::ext::oneapi::bfloat16 *smem_B,
+                                        const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_out);
+
+
+template SYCL_EXTERNAL void gemm_device<sycl::ext::oneapi::bfloat16, 32, 96>(int M, int N, int K, sycl::ext::oneapi::bfloat16 * __restrict__ const A,  sycl::ext::oneapi::bfloat16* B,  sycl::ext::oneapi::bfloat16 * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::ext::oneapi::bfloat16 *smem_A, sycl::ext::oneapi::bfloat16 *smem_B,
+                                        const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_out);
+
+///
+
+// these are not used and make no sense, but the compiler needs them
+
+//template __global__ void gemm_device<float, 32, 128>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc);
+template SYCL_EXTERNAL void gemm_device<sycl::half, 16, 256>(int M, int N, int K, sycl::half * __restrict__ const A,  sycl::half* B,  sycl::half * out,  int lda, int ldb, int ldc,
+                                         const sycl::nd_item<3> &item_ct1,
+                                         sycl::half *smem_A, sycl::half *smem_B,
+                                         const sycl::accessor<sycl::half, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_out);
+                                         
+template SYCL_EXTERNAL void gemm_device<sycl::half, 16, 192>(int M, int N, int K, sycl::half * __restrict__ const A,  sycl::half* B,  sycl::half * out,  int lda, int ldb, int ldc,
+                                         const sycl::nd_item<3> &item_ct1,
+                                         sycl::half *smem_A, sycl::half *smem_B,
+                                         const sycl::accessor<sycl::half, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_out);
+template SYCL_EXTERNAL void gemm_device<sycl::half, 16, 160>(int M, int N, int K, sycl::half * __restrict__ const A,  sycl::half* B,  sycl::half * out,  int lda, int ldb, int ldc,
+                                         const sycl::nd_item<3> &item_ct1,
+                                         sycl::half *smem_A, sycl::half *smem_B,
+                                         const sycl::accessor<sycl::half, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_out);;
+template SYCL_EXTERNAL void gemm_device<sycl::half, 16, 128>(int M, int N, int K, sycl::half * __restrict__ const A,  sycl::half* B,  sycl::half * out,  int lda, int ldb, int ldc,
+                                         const sycl::nd_item<3> &item_ct1,
+                                         sycl::half *smem_A, sycl::half *smem_B,
+                                         const sycl::accessor<sycl::half, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_out);
+//template __global__ void gemm_device<float, 32, 32>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc);
+template SYCL_EXTERNAL void gemm_device<sycl::half, 16, 32>(int M, int N, int K, sycl::half * __restrict__ const A,  sycl::half* B,  sycl::half * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::half *smem_A, sycl::half *smem_B,
+                                        const sycl::accessor<sycl::half, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_out);
+                                        
+template SYCL_EXTERNAL void gemm_device<sycl::half, 16, 64>(int M, int N, int K, sycl::half * __restrict__ const A,  sycl::half* B,  sycl::half * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::half *smem_A, sycl::half *smem_B,
+                                        const sycl::accessor<sycl::half, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_out);
+                                        
+template SYCL_EXTERNAL void gemm_device<sycl::half, 16, 96>(int M, int N, int K, sycl::half * __restrict__ const A,  sycl::half* B,  sycl::half * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::half *smem_A, sycl::half *smem_B,
+                                        const sycl::accessor<sycl::half, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::half, 1> &dacc_out);
+
+
+
+/////
+
+
+template SYCL_EXTERNAL void gemm_device<float, 16, 256>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        float *smem_A, float *smem_B,
+                                        const sycl::accessor<float, 1> &dacc_A, 
+                                         const sycl::accessor<float, 1> &dacc_B, 
+                                         const sycl::accessor<float, 1> &dacc_out);
+                                         
+
+template SYCL_EXTERNAL void gemm_device<float, 16, 192>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        float *smem_A, float *smem_B,
+                                        const sycl::accessor<float, 1> &dacc_A, 
+                                         const sycl::accessor<float, 1> &dacc_B, 
+                                         const sycl::accessor<float, 1> &dacc_out);
+                                         
+
+template SYCL_EXTERNAL void gemm_device<float, 16, 160>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        float *smem_A, float *smem_B,
+                                        const sycl::accessor<float, 1> &dacc_A, 
+                                         const sycl::accessor<float, 1> &dacc_B, 
+                                         const sycl::accessor<float, 1> &dacc_out);
+
+template SYCL_EXTERNAL void gemm_device<float, 16, 128>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        float *smem_A, float *smem_B,
+                                        const sycl::accessor<float, 1> &dacc_A, 
+                                         const sycl::accessor<float, 1> &dacc_B, 
+                                         const sycl::accessor<float, 1> &dacc_out);
+                                         
+//template __global__ void gemm_device<float, 16, 32>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc);
+
+template SYCL_EXTERNAL void gemm_device<float, 16, 32>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        float *smem_A, float *smem_B,
+                                        const sycl::accessor<float, 1> &dacc_A, 
+                                         const sycl::accessor<float, 1> &dacc_B, 
+                                         const sycl::accessor<float, 1> &dacc_out);                                         
+
+template SYCL_EXTERNAL void gemm_device<float, 16, 64>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        float *smem_A, float *smem_B,
+                                        const sycl::accessor<float, 1> &dacc_A, 
+                                         const sycl::accessor<float, 1> &dacc_B, 
+                                         const sycl::accessor<float, 1> &dacc_out);                                         
+template SYCL_EXTERNAL void gemm_device<float, 16, 96>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        float *smem_A, float *smem_B,
+                                        const sycl::accessor<float, 1> &dacc_A, 
+                                         const sycl::accessor<float, 1> &dacc_B, 
+                                         const sycl::accessor<float, 1> &dacc_out);
+
+///
+template SYCL_EXTERNAL void gemm_device<sycl::ext::oneapi::bfloat16, 16, 256>(int M, int N, int K, sycl::ext::oneapi::bfloat16 * __restrict__ const A,  sycl::ext::oneapi::bfloat16* B,  sycl::ext::oneapi::bfloat16 * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::ext::oneapi::bfloat16 *smem_A, sycl::ext::oneapi::bfloat16 *smem_B,
+                                        const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_out);
+                                         
+
+template SYCL_EXTERNAL void gemm_device<sycl::ext::oneapi::bfloat16, 16, 192>(int M, int N, int K, sycl::ext::oneapi::bfloat16 * __restrict__ const A,  sycl::ext::oneapi::bfloat16* B,  sycl::ext::oneapi::bfloat16 * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::ext::oneapi::bfloat16 *smem_A, sycl::ext::oneapi::bfloat16 *smem_B,
+                                        const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_out);
+                                         
+
+template SYCL_EXTERNAL void gemm_device<sycl::ext::oneapi::bfloat16, 16, 160>(int M, int N, int K, sycl::ext::oneapi::bfloat16 * __restrict__ const A,  sycl::ext::oneapi::bfloat16* B,  sycl::ext::oneapi::bfloat16 * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::ext::oneapi::bfloat16 *smem_A, sycl::ext::oneapi::bfloat16 *smem_B,
+                                        const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_out);
+
+template SYCL_EXTERNAL void gemm_device<sycl::ext::oneapi::bfloat16, 16, 128>(int M, int N, int K, sycl::ext::oneapi::bfloat16 * __restrict__ const A,  sycl::ext::oneapi::bfloat16* B,  sycl::ext::oneapi::bfloat16 * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::ext::oneapi::bfloat16 *smem_A, sycl::ext::oneapi::bfloat16 *smem_B,
+                                        const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_out);
+                                         
+//template __global__ void gemm_device<float, 16, 32>(int M, int N, int K, float * __restrict__ const A,  float* B,  float * out,  int lda, int ldb, int ldc);
+
+template SYCL_EXTERNAL void gemm_device<sycl::ext::oneapi::bfloat16, 16, 32>(int M, int N, int K, sycl::ext::oneapi::bfloat16 * __restrict__ const A,  sycl::ext::oneapi::bfloat16* B,  sycl::ext::oneapi::bfloat16 * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::ext::oneapi::bfloat16 *smem_A, sycl::ext::oneapi::bfloat16 *smem_B,
+                                        const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_out);
+template SYCL_EXTERNAL void gemm_device<sycl::ext::oneapi::bfloat16, 16, 64>(int M, int N, int K, sycl::ext::oneapi::bfloat16 * __restrict__ const A,  sycl::ext::oneapi::bfloat16* B,  sycl::ext::oneapi::bfloat16 * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::ext::oneapi::bfloat16 *smem_A, sycl::ext::oneapi::bfloat16 *smem_B,
+                                        const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_out);
+
+
+template SYCL_EXTERNAL void gemm_device<sycl::ext::oneapi::bfloat16, 16, 96>(int M, int N, int K, sycl::ext::oneapi::bfloat16 * __restrict__ const A,  sycl::ext::oneapi::bfloat16* B,  sycl::ext::oneapi::bfloat16 * out,  int lda, int ldb, int ldc,
+                                        const sycl::nd_item<3> &item_ct1,
+                                        sycl::ext::oneapi::bfloat16 *smem_A, sycl::ext::oneapi::bfloat16 *smem_B,
+                                        const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_A, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_B, 
+                                         const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_out);
+
+
+
+
+/////
+///
+template SYCL_EXTERNAL void kgemm_4bit_inference<sycl::half, 96>(int M, int N, int K, sycl::half * __restrict__ const A, unsigned char *B,  float *absmax, sycl::half * out,  int lda, int ldb, int ldc, int blocksize,
+                                             const sycl::nd_item<3> &item_ct1,
+                                             sycl::half *smem_A,
+                                             unsigned char *smem_B,
+                                             sycl::half *smem_C,
+                                             const sycl::accessor<sycl::half, 1> &dacc_A,
+                                             const sycl_dacc_uc &dacc_B, 
+                                             const sycl::accessor<sycl::half, 1> &dacc_out);
+                                            
+template SYCL_EXTERNAL void kgemm_4bit_inference<sycl::half, 128>(int M, int N, int K, sycl::half * __restrict__ const A, unsigned char *B,  float *absmax, sycl::half * out,  int lda, int ldb, int ldc, int blocksize,
+                                              const sycl::nd_item<3> &item_ct1,
+                                              sycl::half *smem_A,
+                                              unsigned char *smem_B,
+                                              sycl::half *smem_C,
+                                              const sycl::accessor<sycl::half, 1> &dacc_A,
+                                              const sycl_dacc_uc &dacc_B, 
+                                              const sycl::accessor<sycl::half, 1> &dacc_out);
+                                              
+template SYCL_EXTERNAL void kgemm_4bit_inference<sycl::half, 160>(int M, int N, int K, sycl::half * __restrict__ const A, unsigned char *B,  float *absmax, sycl::half * out,  int lda, int ldb, int ldc, int blocksize,
+                                              const sycl::nd_item<3> &item_ct1,
+                                              sycl::half *smem_A,
+                                              unsigned char *smem_B,
+                                              sycl::half *smem_C,
+                                              const sycl::accessor<sycl::half, 1> &dacc_A,
+                                              const sycl_dacc_uc &dacc_B, 
+                                              const sycl::accessor<sycl::half, 1> &dacc_out);
+                                              
+template SYCL_EXTERNAL void kgemm_4bit_inference<sycl::half, 256>(int M, int N, int K, sycl::half * __restrict__ const A, unsigned char *B,  float *absmax, sycl::half * out,  int lda, int ldb, int ldc, int blocksize,
+                                              const sycl::nd_item<3> &item_ct1,
+                                              sycl::half *smem_A,
+                                              unsigned char *smem_B,
+                                              sycl::half *smem_C,
+                                              const sycl::accessor<sycl::half, 1> &dacc_A,
+                                              const sycl_dacc_uc &dacc_B, 
+                                              const sycl::accessor<sycl::half, 1> &dacc_out);
+
+                                                        
+/////
+template SYCL_EXTERNAL void kgemm_4bit_inference<float, 96>(int M, int N, int K, float * __restrict__ const A, unsigned char *B,  float *absmax, float * out,  int lda, int ldb, int ldc, int blocksize,
+                                             const sycl::nd_item<3> &item_ct1,
+                                             float *smem_A,
+                                             unsigned char *smem_B,
+                                             float *smem_C,
+                                             const sycl::accessor<float, 1> &dacc_A,
+                                             const sycl_dacc_uc &dacc_B, 
+                                             const sycl::accessor<float, 1> &dacc_out);
+                                            
+template SYCL_EXTERNAL void kgemm_4bit_inference<float, 128>(int M, int N, int K, float * __restrict__ const A, unsigned char *B,  float *absmax, float * out,  int lda, int ldb, int ldc, int blocksize,
+                                             const sycl::nd_item<3> &item_ct1,
+                                             float *smem_A,
+                                             unsigned char *smem_B,
+                                             float *smem_C,
+                                             const sycl::accessor<float, 1> &dacc_A,
+                                             const sycl_dacc_uc &dacc_B, 
+                                             const sycl::accessor<float, 1> &dacc_out);
+
+template SYCL_EXTERNAL void kgemm_4bit_inference<float, 160>(int M, int N, int K, float * __restrict__ const A, unsigned char *B,  float *absmax, float * out,  int lda, int ldb, int ldc, int blocksize,
+                                             const sycl::nd_item<3> &item_ct1,
+                                             float *smem_A,
+                                             unsigned char *smem_B,
+                                             float *smem_C,
+                                             const sycl::accessor<float, 1> &dacc_A,
+                                             const sycl_dacc_uc &dacc_B, 
+                                             const sycl::accessor<float, 1> &dacc_out);
+
+template SYCL_EXTERNAL void kgemm_4bit_inference<float, 256>(int M, int N, int K, float * __restrict__ const A, unsigned char *B,  float *absmax, float * out,  int lda, int ldb, int ldc, int blocksize,
+                                             const sycl::nd_item<3> &item_ct1,
+                                             float *smem_A,
+                                             unsigned char *smem_B,
+                                             float *smem_C,
+                                             const sycl::accessor<float, 1> &dacc_A,
+                                             const sycl_dacc_uc &dacc_B, 
+                                             const sycl::accessor<float, 1> &dacc_out);
+                                              
+template SYCL_EXTERNAL void kgemm_4bit_inference<sycl::ext::oneapi::bfloat16, 96>(int M, int N, int K, sycl::ext::oneapi::bfloat16 * __restrict__ const A, unsigned char *B,  float *absmax, sycl::ext::oneapi::bfloat16 * out,  int lda, int ldb, int ldc, int blocksize,
+                                             const sycl::nd_item<3> &item_ct1,
+                                             sycl::ext::oneapi::bfloat16 *smem_A,
+                                             unsigned char *smem_B,
+                                             sycl::ext::oneapi::bfloat16 *smem_C,
+                                             const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_A,
+                                             const sycl_dacc_uc &dacc_B, 
+                                             const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_out);
+
+
+////
+template SYCL_EXTERNAL void kgemm_4bit_inference_naive<sycl::half, 128, 16>(int M, int N, int K, sycl::half * __restrict__ const A, unsigned char *B,  float *absmax, const float *datatype, sycl::half * out,  int lda, int ldb, int ldc, int blocksize,
+                                                       const sycl::nd_item<3> &item_ct1,
+                                                       sycl::half *quant_map,
+                                                       const sycl::accessor<sycl::half, 1> &dacc_A, 
+                                                        const sycl_dacc_uc &dacc_B, 
+                                                        const sycl::accessor<sycl::half, 1> &dacc_out,
+                                                        const sycl_dacc_float &dacc_absmax,
+                                                        const sycl_dacc_float &dacc_datatype);
+                                                        
+template SYCL_EXTERNAL void kgemm_4bit_inference_naive<float, 128, 32>(int M, int N, int K, float * __restrict__ const A, unsigned char *B,  float *absmax, const float *datatype, float * out,  int lda, int ldb, int ldc, int blocksize,
+                                                         const sycl::nd_item<3> &item_ct1,
+                                                         float *quant_map,
+                                                         const sycl::accessor<float, 1> &dacc_A, 
+                                                        const sycl_dacc_uc &dacc_B, 
+                                                        const sycl::accessor<float, 1> &dacc_out,
+                                                        const sycl_dacc_float &dacc_absmax,
+                                                        const sycl_dacc_float &dacc_datatype);
+                                                        
+template SYCL_EXTERNAL void kgemm_4bit_inference_naive<sycl::ext::oneapi::bfloat16, 128, 16>(int M, int N, int K, sycl::ext::oneapi::bfloat16 * __restrict__ const A, unsigned char *B,  float *absmax, const float *datatype, sycl::ext::oneapi::bfloat16 * out,  int lda, int ldb, int ldc, int blocksize,
+                                                       const sycl::nd_item<3> &item_ct1,
+                                                       sycl::ext::oneapi::bfloat16 *quant_map,
+                                                       const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_A, 
+                                                        const sycl_dacc_uc &dacc_B, 
+                                                        const sycl::accessor<sycl::ext::oneapi::bfloat16, 1> &dacc_out,
+                                                        const sycl_dacc_float &dacc_absmax,
+                                                        const sycl_dacc_float &dacc_datatype);
+
+
+                                                        
+template SYCL_EXTERNAL void kspmm_coo_very_sparse_naive<signed char, 8, 16>(int *max_count, int *max_idx, int *offset_rowidx, int *rowidx, int *colidx, sycl::half *values, signed char *B, sycl::half *out, float * __restrict__ const dequant_stats, int nnz, int rowsA, int rowsB, int colsB, const sycl::nd_item<3> &item_ct1,
+ sycl::half *smem_dequant_stats, const sycl_dacc &dacc_max_count, const sycl_dacc &dacc_max_idx, const sycl_dacc &dacc_offset_rowidx, const sycl_dacc &dacc_rowidx, const sycl_dacc &dacc_colidx, const sycl::accessor<sycl::half, 1> &dacc_values, const sycl::accessor<signed char, 1> &dacc_B, const sycl::accessor<sycl::half, 1> &dacc_out, const sycl_dacc_float &dacc_dequant_stats);
+                                                       
+template SYCL_EXTERNAL void kspmm_coo_very_sparse_naive<signed char, 16, 16>(int *max_count, int *max_idx, int *offset_rowidx, int *rowidx, int *colidx, sycl::half *values, signed char *B, sycl::half *out, float * __restrict__ const dequant_stats, int nnz, int rowsA, int rowsB, int colsB, const sycl::nd_item<3> &item_ct1,
+ sycl::half *smem_dequant_stats, const sycl_dacc &dacc_max_count, const sycl_dacc &dacc_max_idx, const sycl_dacc &dacc_offset_rowidx, const sycl_dacc &dacc_rowidx, const sycl_dacc &dacc_colidx, const sycl::accessor<sycl::half, 1> &dacc_values, const sycl::accessor<signed char, 1> &dacc_B, const sycl::accessor<sycl::half, 1> &dacc_out, const sycl_dacc_float &dacc_dequant_stats);
+                                                       
+
+template SYCL_EXTERNAL void kspmm_coo_very_sparse_naive<signed char, 32, 16>(int *max_count, int *max_idx, int *offset_rowidx, int *rowidx, int *colidx, sycl::half *values, signed char *B, sycl::half *out, float * __restrict__ const dequant_stats, int nnz, int rowsA, int rowsB, int colsB, const sycl::nd_item<3> &item_ct1,
+ sycl::half *smem_dequant_stats, const sycl_dacc &dacc_max_count, const sycl_dacc &dacc_max_idx, const sycl_dacc &dacc_offset_rowidx, const sycl_dacc &dacc_rowidx, const sycl_dacc &dacc_colidx, const sycl::accessor<sycl::half, 1> &dacc_values, const sycl::accessor<signed char, 1> &dacc_B, const sycl::accessor<sycl::half, 1> &dacc_out, const sycl_dacc_float &dacc_dequant_stats);
+
+                                                       
+template SYCL_EXTERNAL void kspmm_coo_very_sparse_naive<signed char, 32, 8>(int *max_count, int *max_idx, int *offset_rowidx, int *rowidx, int *colidx, sycl::half *values, signed char *B, sycl::half *out, float * __restrict__ const dequant_stats, int nnz, int rowsA, int rowsB, int colsB, const sycl::nd_item<3> &item_ct1,
+ sycl::half *smem_dequant_stats, const sycl_dacc &dacc_max_count, const sycl_dacc &dacc_max_idx, const sycl_dacc &dacc_offset_rowidx, const sycl_dacc &dacc_rowidx, const sycl_dacc &dacc_colidx, const sycl::accessor<sycl::half, 1> &dacc_values, const sycl::accessor<signed char, 1> &dacc_B, const sycl::accessor<sycl::half, 1> &dacc_out, const sycl_dacc_float &dacc_dequant_stats);
+ 
+template SYCL_EXTERNAL void kspmm_coo_very_sparse_naive<signed char, 16, 8>(int *max_count, int *max_idx, int *offset_rowidx, int *rowidx, int *colidx, sycl::half *values, signed char *B, sycl::half *out, float * __restrict__ const dequant_stats, int nnz, int rowsA, int rowsB, int colsB, const sycl::nd_item<3> &item_ct1,
+ sycl::half *smem_dequant_stats, const sycl_dacc &dacc_max_count, const sycl_dacc &dacc_max_idx, const sycl_dacc &dacc_offset_rowidx, const sycl_dacc &dacc_rowidx, const sycl_dacc &dacc_colidx, const sycl::accessor<sycl::half, 1> &dacc_values, const sycl::accessor<signed char, 1> &dacc_B, const sycl::accessor<sycl::half, 1> &dacc_out, const sycl_dacc_float &dacc_dequant_stats);
+
+template SYCL_EXTERNAL void kspmm_coo_very_sparse_naive<signed char, 8, 8>(int *max_count, int *max_idx, int *offset_rowidx, int *rowidx, int *colidx, sycl::half *values, signed char *B, sycl::half *out, float * __restrict__ const dequant_stats, int nnz, int rowsA, int rowsB, int colsB, const sycl::nd_item<3> &item_ct1,
+ sycl::half *smem_dequant_stats, const sycl_dacc &dacc_max_count, const sycl_dacc &dacc_max_idx, const sycl_dacc &dacc_offset_rowidx, const sycl_dacc &dacc_rowidx, const sycl_dacc &dacc_colidx, const sycl::accessor<sycl::half, 1> &dacc_values, const sycl::accessor<signed char, 1> &dacc_B, const sycl::accessor<sycl::half, 1> &dacc_out, const sycl_dacc_float &dacc_dequant_stats);
+ 
+ 
+
+///
+template SYCL_EXTERNAL void kspmm_coo_very_sparse_naive<sycl::half, 8, 16>(int *max_count, int *max_idx, int *offset_rowidx, int *rowidx, int *colidx, sycl::half *values, sycl::half *B, sycl::half *out, float * __restrict__ const dequant_stats, int nnz, int rowsA, int rowsB, int colsB, const sycl::nd_item<3> &item_ct1,
+ sycl::half *smem_dequant_stats, const sycl_dacc &dacc_max_count, const sycl_dacc &dacc_max_idx, const sycl_dacc &dacc_offset_rowidx, const sycl_dacc &dacc_rowidx, const sycl_dacc &dacc_colidx, const sycl::accessor<sycl::half, 1> &dacc_values, const sycl::accessor<sycl::half, 1> &dacc_B, const sycl::accessor<sycl::half, 1> &dacc_out, const sycl_dacc_float &dacc_dequant_stats);
+                                                       
+template SYCL_EXTERNAL void kspmm_coo_very_sparse_naive<sycl::half, 16, 16>(int *max_count, int *max_idx, int *offset_rowidx, int *rowidx, int *colidx, sycl::half *values, sycl::half *B, sycl::half *out, float * __restrict__ const dequant_stats, int nnz, int rowsA, int rowsB, int colsB, const sycl::nd_item<3> &item_ct1,
+ sycl::half *smem_dequant_stats, const sycl_dacc &dacc_max_count, const sycl_dacc &dacc_max_idx, const sycl_dacc &dacc_offset_rowidx, const sycl_dacc &dacc_rowidx, const sycl_dacc &dacc_colidx, const sycl::accessor<sycl::half, 1> &dacc_values, const sycl::accessor<sycl::half, 1> &dacc_B, const sycl::accessor<sycl::half, 1> &dacc_out, const sycl_dacc_float &dacc_dequant_stats);
+                                                       
+
+template SYCL_EXTERNAL void kspmm_coo_very_sparse_naive<sycl::half, 32, 16>(int *max_count, int *max_idx, int *offset_rowidx, int *rowidx, int *colidx, sycl::half *values, sycl::half *B, sycl::half *out, float * __restrict__ const dequant_stats, int nnz, int rowsA, int rowsB, int colsB, const sycl::nd_item<3> &item_ct1,
+ sycl::half *smem_dequant_stats, const sycl_dacc &dacc_max_count, const sycl_dacc &dacc_max_idx, const sycl_dacc &dacc_offset_rowidx, const sycl_dacc &dacc_rowidx, const sycl_dacc &dacc_colidx, const sycl::accessor<sycl::half, 1> &dacc_values, const sycl::accessor<sycl::half, 1> &dacc_B, const sycl::accessor<sycl::half, 1> &dacc_out, const sycl_dacc_float &dacc_dequant_stats);
+
+                                                       
+template SYCL_EXTERNAL void kspmm_coo_very_sparse_naive<sycl::half, 32, 8>(int *max_count, int *max_idx, int *offset_rowidx, int *rowidx, int *colidx, sycl::half *values, sycl::half *B, sycl::half *out, float * __restrict__ const dequant_stats, int nnz, int rowsA, int rowsB, int colsB, const sycl::nd_item<3> &item_ct1,
+ sycl::half *smem_dequant_stats, const sycl_dacc &dacc_max_count, const sycl_dacc &dacc_max_idx, const sycl_dacc &dacc_offset_rowidx, const sycl_dacc &dacc_rowidx, const sycl_dacc &dacc_colidx, const sycl::accessor<sycl::half, 1> &dacc_values, const sycl::accessor<sycl::half, 1> &dacc_B, const sycl::accessor<sycl::half, 1> &dacc_out, const sycl_dacc_float &dacc_dequant_stats);
+
+template SYCL_EXTERNAL void kspmm_coo_very_sparse_naive<sycl::half, 16, 8>(int *max_count, int *max_idx, int *offset_rowidx, int *rowidx, int *colidx, sycl::half *values, sycl::half *B, sycl::half *out, float * __restrict__ const dequant_stats, int nnz, int rowsA, int rowsB, int colsB, const sycl::nd_item<3> &item_ct1,
+ sycl::half *smem_dequant_stats, const sycl_dacc &dacc_max_count, const sycl_dacc &dacc_max_idx, const sycl_dacc &dacc_offset_rowidx, const sycl_dacc &dacc_rowidx, const sycl_dacc &dacc_colidx, const sycl::accessor<sycl::half, 1> &dacc_values, const sycl::accessor<sycl::half, 1> &dacc_B, const sycl::accessor<sycl::half, 1> &dacc_out, const sycl_dacc_float &dacc_dequant_stats);
+
+template SYCL_EXTERNAL void kspmm_coo_very_sparse_naive<sycl::half, 8, 8>(int *max_count, int *max_idx, int *offset_rowidx, int *rowidx, int *colidx, sycl::half *values, sycl::half *B, sycl::half *out, float * __restrict__ const dequant_stats, int nnz, int rowsA, int rowsB, int colsB, const sycl::nd_item<3> &item_ct1,
+ sycl::half *smem_dequant_stats, const sycl_dacc &dacc_max_count, const sycl_dacc &dacc_max_idx, const sycl_dacc &dacc_offset_rowidx, const sycl_dacc &dacc_rowidx, const sycl_dacc &dacc_colidx, const sycl::accessor<sycl::half, 1> &dacc_values, const sycl::accessor<sycl::half, 1> &dacc_B, const sycl::accessor<sycl::half, 1> &dacc_out, const sycl_dacc_float &dacc_dequant_stats);
