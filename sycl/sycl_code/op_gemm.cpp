@@ -336,7 +336,7 @@ template int get_leading_dim<COL32>(int dim1, int dim2);
 
 //=================================transform GEMM==============================
 
-template <typename T, int SRC, int TARGET, bool transpose, int DTYPE> void transform( T *A, T *out, int dim1, int dim2)
+template <typename T, int SRC, int TARGET, bool transpose, int DTYPE> void transform( dpct::queue_ptr ltHandle, T *A, T *out, int dim1, int dim2)
 {
 
   using namespace dnnl;
@@ -381,14 +381,14 @@ template <typename T, int SRC, int TARGET, bool transpose, int DTYPE> void trans
 
 }
 
-template void transform<int8_t, ROW, COL, false, 8>(int8_t *A, int8_t *out, int dim1, int dim2);
-template void transform<int8_t, ROW, ROW, false, 8>( int8_t *A, int8_t *out, int dim1, int dim2);
-template void transform<int8_t, ROW, COL32, false, 8>(int8_t *A, int8_t *out, int dim1, int dim2);
-template void transform<int32_t, ROW, COL32, false, 32>( int32_t *A, int32_t *out, int dim1, int dim2);
-template void transform<int8_t, ROW, COL_TURING, false, 8>( int8_t *A, int8_t *out, int dim1, int dim2);
-template void transform<int8_t, ROW, COL_AMPERE, false, 8>( int8_t *A, int8_t *out, int dim1, int dim2);
-template void transform<int8_t, COL32, ROW, false, 8>( int8_t *A, int8_t *out, int dim1, int dim2);
-template void transform<int32_t, COL32, ROW, false, 32>( int32_t *A, int32_t *out, int dim1, int dim2);
+template void transform<int8_t, ROW, COL, false, 8>(dpct::queue_ptr ltHandle,int8_t *A, int8_t *out, int dim1, int dim2);
+template void transform<int8_t, ROW, ROW, false, 8>( dpct::queue_ptr ltHandle, int8_t *A, int8_t *out, int dim1, int dim2);
+template void transform<int8_t, ROW, COL32, false, 8>(dpct::queue_ptr ltHandle, int8_t *A, int8_t *out, int dim1, int dim2);
+template void transform<int32_t, ROW, COL32, false, 32>( dpct::queue_ptr ltHandle, int32_t *A, int32_t *out, int dim1, int dim2);
+template void transform<int8_t, ROW, COL_TURING, false, 8>( dpct::queue_ptr ltHandle, int8_t *A, int8_t *out, int dim1, int dim2);
+template void transform<int8_t, ROW, COL_AMPERE, false, 8>( dpct::queue_ptr ltHandle, int8_t *A, int8_t *out, int dim1, int dim2);
+template void transform<int8_t, COL32, ROW, false, 8>( dpct::queue_ptr ltHandle, int8_t *A, int8_t *out, int dim1, int dim2);
+template void transform<int32_t, COL32, ROW, false, 32>( dpct::queue_ptr ltHandle, int32_t *A, int32_t *out, int dim1, int dim2);
 
 
 //========================igemmlt============================================

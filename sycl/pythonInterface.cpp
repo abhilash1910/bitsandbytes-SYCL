@@ -135,9 +135,9 @@ void dequantizeBlockwise_bf16(float *code, unsigned char *A, float *absmax, sycl
 void dequantizeBlockwise_bf16_fp4(float *code, unsigned char *A, float *absmax, sycl::ext::oneapi::bfloat16 *out, int blocksize, const int n){ dequantizeBlockwise<sycl::ext::oneapi::bfloat16, FP4>(NULL, A, absmax, out, blocksize, n); }
 void dequantizeBlockwise_bf16_nf4(float *code, unsigned char *A, float *absmax, sycl::ext::oneapi::bfloat16 *out, int blocksize, const int n){ dequantizeBlockwise<sycl::ext::oneapi::bfloat16, NF4>(NULL, A, absmax, out, blocksize, n); }
 
-/*
+
 #define MAKE_FUNC_TRANSFORM(fbits, fsrc, ftrgt, ftranspose, dtype, src, target, transpose, bits) \
-void transform_##fbits##_##fsrc##_to_##ftrgt##_##ftranspose( dtype *A, dtype *out, int dim1, int dim2) \
+void transform_##fbits##_##fsrc##_to_##ftrgt##_##ftranspose( dpct::queue_ptr ltHandle, dtype *A, dtype *out, int dim1, int dim2) \
 { \
 	transform<dtype, src, target, transpose, bits>(ltHandle, A, out, dim1, dim2); \
 } \
@@ -150,7 +150,7 @@ MAKE_FUNC_TRANSFORM(8, row, col_turing, n, int8_t, ROW, COL_TURING, false, 8);
 MAKE_FUNC_TRANSFORM(8, row, col_ampere, n, int8_t, ROW, COL_AMPERE, false, 8);
 MAKE_FUNC_TRANSFORM(8, col32, row, n, int8_t, COL32, ROW, false, 8);
 MAKE_FUNC_TRANSFORM(32, col32, row, n, int32_t, COL32, ROW, false, 32);
-*/
+
 void transform_row2col32(char * A, char *out, int rows, int cols){ transformRowToFormat<COL32, 0>(A, out, rows, cols); }
 void transform_row2col32T(char * A, char *out, int rows, int cols){ transformRowToFormat<COL32, 1>(A, out, rows, cols); }
 void transform_row2turing(char * A, char *out, int rows, int cols){ transformRowToFormat<COL_TURING, 0>(A, out, rows, cols); }
@@ -376,12 +376,12 @@ extern "C"
 
 	void cgemm_4bit_inference(int m, int n, int k, sycl::half * A,  unsigned char* B,  float *absmax, sycl::half * out,  int lda, int ldb, int ldc, int blocksize)
 	{ gemm_4bit_inference(m, n, k, A, B, absmax, out, lda, ldb, ldc, blocksize); }
-/*
+
 	void *cget_managed_ptr(size_t bytes)
 	{
 		void *ptr;
-		CUDA_CHECK_RETURN(cudaMallocManaged(&ptr, bytes, cudaMemAttachHost));
-		CUDA_CHECK_RETURN(cudaPeekAtLastError());
+		//CUDA_CHECK_RETURN(cudaMallocManaged(&ptr, bytes, cudaMemAttachHost));
+		//CUDA_CHECK_RETURN(cudaPeekAtLastError());
 
 		return ptr;
 	}
@@ -390,13 +390,13 @@ extern "C"
 	{
 
 		int hasPrefetch = 0;
-		CUDA_CHECK_RETURN(cudaDeviceGetAttribute(&hasPrefetch, cudaDevAttrConcurrentManagedAccess, device)); // 40ns overhead
+		//CUDA_CHECK_RETURN(cudaDeviceGetAttribute(&hasPrefetch, cudaDevAttrConcurrentManagedAccess, device)); // 40ns overhead
 		if (hasPrefetch == 0) return;
 
-		CUDA_CHECK_RETURN(cudaMemPrefetchAsync(ptr, bytes, device, 0));
-		CUDA_CHECK_RETURN(cudaPeekAtLastError());
+		//CUDA_CHECK_RETURN(cudaMemPrefetchAsync(ptr, bytes, device, 0));
+		//CUDA_CHECK_RETURN(cudaPeekAtLastError());
 	}
-*/
+
   #define CMAKE_ELEMENTWISE_FUNC(fname, type_name, ctype, FUNC) \
 	void c##fname##_##type_name(ctype *A, ctype *B, ctype value, long n){ fname##_##type_name(A, B, value, n); } \
 
