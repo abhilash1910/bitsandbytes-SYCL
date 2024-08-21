@@ -35,11 +35,11 @@ $python setup.py install
 
 Once done, it will create a python package named : python_src_quants (which is bitsandbytes renamed differently)
 The next step involves testing on iGPU (pvc) only .
-Navigate to ../bitsandbytes_sycl_samples/tests_pvc folder
+Navigate to /bitsandbytes_sycl_samples folder
 
 ```bash
 
-$python import.py 
+$python tests_pvc/import.py 
 
 This will give the corresponding output on PVC:
 
@@ -57,6 +57,21 @@ SUCCESS!
 Installation was successful!
 
 ```
+For running matmul igemmlt tests , run:
+
+```bash
+$python tests_pvc/test_matmulqlt.py
+
+This will give the corresponding output on PVC:
+
+/bitsandbytes_sycl_samples/python_src_quants/libbitsandbytes_sycl.so
+Test standard matmul pass
+Test igemmlt dim3 matmul pass
+Test standard ibmm matmul pass
+
+
+```
+
 The other tests are being added inside the tests_pvc folder. 
 
 Gemm kernels and more tests are under progress
