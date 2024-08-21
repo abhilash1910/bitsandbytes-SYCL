@@ -1873,7 +1873,7 @@ def histogram_scatter_add_2d(histogram: Tensor, index1: Tensor, index2: Tensor, 
     is_on_gpu([histogram, index1, index2, source])
     lib.chistogram_scatter_add_2d(get_ptr(histogram), get_ptr(index1), get_ptr(index2), get_ptr(source), maxdim1, n)
 
-"""
+
 def check_matmul(A, B, out, transposed_A, transposed_B, expected_type=torch.int8):
     if not torch.xpu.is_initialized():
         torch.xpu.init()
@@ -2344,7 +2344,7 @@ def igemmlt(A, B, SA, SB, out=None, Sout=None, dtype=torch.int32):
 
     return out, Sout
 
-"""
+
 def mm_dequant(A, quant_state, row_stats, col_stats, out=None, new_row_stats=None, new_col_stats=None, bias=None):
     assert A.dtype == torch.int32
     if bias is not None:
