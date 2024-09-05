@@ -381,69 +381,182 @@ template <typename T, int SRC, int TARGET, bool transpose, int DTYPE> void trans
 
 }
 
-template void transform<int8_t, ROW, COL, false, 8>(dpct::queue_ptr ltHandle,int8_t *A, int8_t *out, int dim1, int dim2);
-template void transform<int8_t, ROW, ROW, false, 8>( dpct::queue_ptr ltHandle, int8_t *A, int8_t *out, int dim1, int dim2);
+template void transform<int8_t, ROW, COL, false, 8>(dpct::queue_ptr ltHandle, int8_t *A, int8_t *out, int dim1, int dim2);
+template void transform<int8_t, ROW, ROW, false, 8>(dpct::queue_ptr ltHandle,  int8_t *A, int8_t *out, int dim1, int dim2);
 template void transform<int8_t, ROW, COL32, false, 8>(dpct::queue_ptr ltHandle, int8_t *A, int8_t *out, int dim1, int dim2);
-template void transform<int32_t, ROW, COL32, false, 32>( dpct::queue_ptr ltHandle, int32_t *A, int32_t *out, int dim1, int dim2);
-template void transform<int8_t, ROW, COL_TURING, false, 8>( dpct::queue_ptr ltHandle, int8_t *A, int8_t *out, int dim1, int dim2);
-template void transform<int8_t, ROW, COL_AMPERE, false, 8>( dpct::queue_ptr ltHandle, int8_t *A, int8_t *out, int dim1, int dim2);
-template void transform<int8_t, COL32, ROW, false, 8>( dpct::queue_ptr ltHandle, int8_t *A, int8_t *out, int dim1, int dim2);
-template void transform<int32_t, COL32, ROW, false, 32>( dpct::queue_ptr ltHandle, int32_t *A, int32_t *out, int dim1, int dim2);
+template void transform<int32_t, ROW, COL32, false, 32>(dpct::queue_ptr ltHandle,  int32_t *A, int32_t *out, int dim1, int dim2);
+template void transform<int8_t, ROW, COL_TURING, false, 8>(dpct::queue_ptr ltHandle,  int8_t *A, int8_t *out, int dim1, int dim2);
+template void transform<int8_t, ROW, COL_AMPERE, false, 8>(dpct::queue_ptr ltHandle,  int8_t *A, int8_t *out, int dim1, int dim2);
+template void transform<int8_t, COL32, ROW, false, 8>(dpct::queue_ptr ltHandle,  int8_t *A, int8_t *out, int dim1, int dim2);
+template void transform<int32_t, COL32, ROW, false, 32>(dpct::queue_ptr ltHandle,  int32_t *A, int32_t *out, int dim1, int dim2);
 
 
 //========================igemmlt============================================
+/*
+template <int FORMATB, int DTYPE_OUT, int SCALE_ROWS> int igemmlt( int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc){
 
-template <int FORMATB, int DTYPE_OUT, int SCALE_ROWS> int igemmlt( int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
- try {
-    
+      dpct::device_ext &dev = dpct::get_current_device();
+  
+      sycl::queue &q = dev.in_order_queue();
+  
+     // Get the device associated with the queue
+        //sycl::device dev = q.get_device();
+        // Get the context associated with the queue
+        sycl::context ctx = q.get_context();
+        const dnnl::engine eng = dnnl::sycl_interop::make_engine(dev, ctx);
+        const dnnl::stream stream = dnnl::sycl_interop::make_stream(eng, q);
+        dnnl::memory::dims a_dims = { m, k };
+        dnnl::memory::dims b_dims = { k, n };
+        dnnl::memory::dims c_dims = { m, n };
+        const auto a_in_md = dnnl::memory::desc(a_dims, at, a_trans ? tag::ba : tag::ab);
+        const auto b_in_md = dnnl::memory::desc(b_dims, bt, b_trans ? tag::ba : tag::ab);
+        const auto c_md = dnnl::memory::desc(c_dims, ct, tag::ab);
+        auto a_mem = dnnl::memory(a_in_md, eng, (void*)a);
+        auto b_mem = dnnl::memory(b_in_md, eng, (void*)b);
+        auto matmul_pd = dnnl::matmul::primitive_desc(eng, a_in_md, b_in_md, c_md);
+        auto c_mem = dnnl::memory(matmul_pd.dst_desc(), eng, c);
+
+        // Create the primitive.
+        auto matmul_prim = dnnl::matmul(matmul_pd);
+        // Primitive arguments.
+        std::unordered_map<int, dnnl::memory> matmul_args;
+        matmul_args.insert({ DNNL_ARG_SRC, a_mem });
+        matmul_args.insert({ DNNL_ARG_WEIGHTS, b_mem });
+        matmul_args.insert({ DNNL_ARG_DST, c_mem });
+
+        matmul_prim.execute(stream, matmul_args);
+        
+
+
+}
+
+*/
+
+
+#include <oneapi/mkl.hpp>
+
+template <int FORMATB, int DTYPE_OUT, int SCALE_ROWS>
+int igemmlt(int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc) try {
+    using namespace oneapi;
+
+    // Get the current device, queue, and context
+    dpct::device_ext &dev = dpct::get_current_device();
+    sycl::queue &q_ct1 = dev.in_order_queue();
+
+    // Assuming A, B, C are already allocated and copied to device memory.
+    // Convert input pointers to appropriate types
+    auto A_dev = (float *)A;
+    auto B_dev = (float *)B;
+    auto C_dev = (float *)C;
+
+    // Initialize alpha and beta for GEMM
+    float alpha = 1.0f;
+    float beta = 0.0f;
+    // Perform matrix multiplication using oneMKL GEMM function
+    if (DTYPE_OUT == 32) {
+        // C is int32_t
+        mkl::blas::column_major::gemm(q_ct1, mkl::transpose::nontrans, mkl::transpose::nontrans, m, n, k,
+                                      alpha, A_dev, lda, B_dev, ldb, beta, (float *)C_dev, ldc );
+    } else {
+        // C is int8_t, perform operation with scaling
+        mkl::blas::column_major::gemm(q_ct1, mkl::transpose::nontrans, mkl::transpose::nontrans, m, n, k,
+                                      alpha, A_dev, lda, B_dev, ldb, beta, (float *)C_dev, ldc);
+    }
+
+    // If row scaling is needed, apply the scaling manually
+    if (SCALE_ROWS) {
+        q_ct1.submit([&](sycl::handler &cgh) {
+            cgh.parallel_for(sycl::range<1>(m * n), [=](sycl::id<1> idx) {
+                int row = idx[0] / n;
+                if (DTYPE_OUT == 32) {
+                    ((int32_t *)C_dev)[idx] *= row_scale[row];
+                } else {
+                    ((int8_t *)C_dev)[idx] *= row_scale[row];
+                }
+            });
+        }).wait();
+    }
+
+    return 0;
+} catch (sycl::exception const &exc) {
+    std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
+    return 1;
+}
+
+/*
+template <int FORMATB, int DTYPE_OUT, int SCALE_ROWS> int igemmlt( int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc){
+ std::cout<<"enter"<<std::endl;
+ 
+   try{ 
     using tag = memory::format_tag;
     using dt = memory::data_type;
     auto dev = sycl::device(sycl::gpu_selector_v);
     auto ctx = sycl::context(dev);
+    std::cout<<"enter context"<<std::endl;
+ 
     
-    dnnl::engine engine = sycl_interop::make_engine(dev, ctx);
     // column major 
     const memory::dims a_strides = memory::dims {1, lda};
+    std::cout<<"memory dims"<<std::endl;
     const auto a_md = memory::desc({m, k}, dt::s8, a_strides);
+    std::cout<<"amd"<<std::endl;
     const memory::dims b_strides = memory::dims {ldb, 1};
     const auto b_md = memory::desc({k, n}, dt::s8, b_strides);
+    std::cout<<"bmd"<<std::endl;
     const memory::dims c_strides = memory::dims {ldc, 1};
-    const auto c_md = DTYPE_OUT == 32 ? memory::desc({m, n}, dt::s32, c_strides) : memory::desc({m, n}, dt::s8, c_strides);
-    
+    std::cout<<"c strides"<<std::endl;
+    //auto c_md = memory::desc({m, n}, dt::s32, c_strides);
+    //std::cout<<"cmd"<<std::endl;
     //memory align
+     dnnl::engine engine = sycl_interop::make_engine(dev, ctx);
+     
+     
+     
+   
     memory a_mem(a_md, engine);
     memory b_mem(b_md, engine);
-    memory c_mem(c_md, engine);
-    memory scales_C_mem({{1}, dt::f32, {1}}, engine, row_scale);
-    
+    std::cout<<"A & B mem"<<std::endl;
+    memory c_mem((memory::desc({m, n}, dt::s8, c_strides)), engine);
+    //memory scales_C_mem({{1}, dt::f32, {1}}, engine, row_scale);
+    //sycl::ext::oneapi::experimental::printf("Memory");
+    std::cout<<"Memory"<<std::endl;
     //create dnnl stream
     auto q_ct1 = sycl::queue(ctx, dev);
     dnnl::stream stream = sycl_interop::make_stream(engine, q_ct1);
-    
+    std::cout<<"stream stat"<<std::endl;
     primitive_attr attr;
-    if (SCALE_ROWS) {
-        attr.set_scales_mask(DNNL_ARG_DST, /* mask */ 1 << 1);
-    }
+    //if (SCALE_ROWS) {
+    //    attr.set_scales_mask(DNNL_ARG_DST,  1 << 1);
+    //}
     
-    auto matmul_pd = matmul::primitive_desc(engine, a_md, b_md, c_md, attr);
+    auto matmul_pd = matmul::primitive_desc(engine, a_md, b_md, (memory::desc({k, n}, dt::s8, c_strides)), attr);
     auto matmul_prim = matmul(matmul_pd);
     std::unordered_map<int, memory> matmul_args;
     matmul_args.insert({DNNL_ARG_SRC, a_mem});
     matmul_args.insert({DNNL_ARG_WEIGHTS, b_mem});
     matmul_args.insert({DNNL_ARG_DST, c_mem});
-
+    /*
     if (SCALE_ROWS) {
       matmul_args.insert({DNNL_ARG_ATTR_SCALES | DNNL_ARG_DST, scales_C_mem});
     }
+    
+    try{
+    
     matmul_prim.execute(stream, matmul_args);
     stream.wait();
-
+    
+    std::cout<<"wait for stream"<<std::endl;
+    sycl::ext::oneapi::experimental::printf("Wait for stream");
+    return 0;
+    
+    
 }
 catch (sycl::exception const &exc) {
   std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-  std::exit(1);
+  return 1;
 }
-
+return 0;}
+*/
 
 //===========================gemm_host============================================
 

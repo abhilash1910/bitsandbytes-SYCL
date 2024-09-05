@@ -11,8 +11,8 @@ from torch import Tensor, device, dtype, nn
 import torch.nn.functional as F
 
 import bitsandbytes as bnb
-from python_src_quants.autograd._functions import get_tile_inds, undo_layout
-from python_src_quants.functional import QuantState
+from python_src_quants.autograd._functions import get_tile_inds, undo_layout, MatmulLtState, matmul
+from python_src_quants.functional import QuantState, double_quant
 from python_src_quants.optim import GlobalOptimManager
 from python_src_quants.utils import (
     INVERSE_LINEAR_8BIT_WEIGHTS_FORMAT_MAPPING,
@@ -709,7 +709,7 @@ class Linear8bitLt(nn.Linear):
         """
         super().__init__(input_features, output_features, bias, device)
         assert not memory_efficient_backward, "memory_efficient_backward is no longer required and the argument is deprecated in 0.37.0 and will be removed in 0.39.0"
-        self.state = bnb.MatmulLtState()
+        self.state = MatmulLtState()
         self.index = index
 
         self.state.threshold = threshold
@@ -809,7 +809,7 @@ class Linear8bitLt(nn.Linear):
         if self.bias is not None and self.bias.dtype != x.dtype:
             self.bias.data = self.bias.data.to(x.dtype)
 
-        out = bnb.matmul(x, self.weight, bias=self.bias, state=self.state)
+        out = matmul(x, self.weight, bias=self.bias, state=self.state)
 
         if not self.state.has_fp16_weights:
             if self.state.CB is not None and self.state.CxB is not None:
@@ -860,7 +860,7 @@ class SwitchBackLinearBnb(nn.Linear):
         device=None,
     ):
         super().__init__(input_features, output_features, bias, device)
-        self.state = bnb.MatmulLtState()
+        self.state = MatmulLtState()
         self.index = index
 
         self.state.threshold = threshold

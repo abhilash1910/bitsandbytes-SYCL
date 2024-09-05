@@ -2297,7 +2297,7 @@ def igemmlt(A, B, SA, SB, out=None, Sout=None, dtype=torch.int32):
     formatB = SB[1]
     prev_device = A.device
     torch.xpu.set_device(A.device)
-
+    
     ptr = CUBLAS_Context.get_instance().get_context(A.device)
     ptrA = get_ptr(A)
     ptrB = get_ptr(B)
@@ -2322,17 +2322,24 @@ def igemmlt(A, B, SA, SB, out=None, Sout=None, dtype=torch.int32):
     has_error = 0
     ptrRowScale = get_ptr(None)
     is_on_gpu([A, B, out])
+    print("on device")
     if formatB == "col_turing":
+        print("col turing")
         if dtype == torch.int32:
-            has_error = lib.cigemmlt_turing_32(ptr, m, n, k, ptrA, ptrB, ptrC, ptrRowScale, lda, ldb, ldc)
+            print("igemmlt")
+            has_error = lib.cigemmlt_turing_32( m, n, k, ptrA, ptrB, ptrC, ptrRowScale, lda, ldb, ldc)
         else:
-            has_error = lib.cigemmlt_turing_8(ptr, m, n, k, ptrA, ptrB, ptrC, ptrRowScale, lda, ldb, ldc)
+            has_error = lib.cigemmlt_turing_8( m, n, k, ptrA, ptrB, ptrC, ptrRowScale, lda, ldb, ldc)
     elif formatB == "col_ampere":
+        print("col ampere")
         if dtype == torch.int32:
-            has_error = lib.cigemmlt_ampere_32(ptr, m, n, k, ptrA, ptrB, ptrC, ptrRowScale, lda, ldb, ldc)
+            print("igemmlt")
+            has_error = lib.cigemmlt_ampere_32( m, n, k, ptrA, ptrB, ptrC, ptrRowScale, lda, ldb, ldc)
         else:
-            has_error = lib.cigemmlt_ampere_8(ptr, m, n, k, ptrA, ptrB, ptrC, ptrRowScale, lda, ldb, ldc)
-
+            has_error = lib.cigemmlt_ampere_8( m, n, k, ptrA, ptrB, ptrC, ptrRowScale, lda, ldb, ldc)
+    print("matmul col ")
+    if has_error == 1:
+        has_error = 100
     if has_error == 100:  # `ERR_NOT_IMPLEMENTED` is defined as 100 in `ops.cu`
         raise NotImplementedError("igemmlt not available (probably built with NO_CUBLASLT)")
 
@@ -2427,7 +2434,7 @@ def get_colrow_absmax(A, row_stats=None, col_stats=None, nnz_block_ptr=None, thr
 
     return row_stats, col_stats, nnz_block_ptr
 
-"""
+
 class COOSparseTensor:
     def __init__(self, rows, cols, nnz, rowidx, colidx, values):
         assert rowidx.dtype == torch.int32
@@ -2595,9 +2602,10 @@ def double_quant(A, col_stats=None, row_stats=None, out_col=None, out_row=None, 
     post_call(prev_device)
 
     return out_row, out_col, row_stats, col_stats, coo_tensor
-"""
+
 
 def transform(A, to_order, from_order="row", out=None, transpose=False, state=None, ld=None):
+    print(A, A.device)
     prev_device = pre_call(A.device)
     if state is None:
         state = (A.shape, from_order)
