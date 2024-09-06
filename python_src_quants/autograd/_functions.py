@@ -6,7 +6,7 @@ import warnings
 from warnings import warn
 
 import torch
-
+import intel_extension_for_pytorch
 import python_src_quants.functional as F
 
 
@@ -217,14 +217,15 @@ matmul_cublas = MatMul8bit.apply
 
 def supports_igemmlt(device: torch.device) -> bool:
     """check if this device supports the optimized int8 kernel"""
-    """
-    if torch.cuda.get_device_capability(device=device) < (7, 5):
+    #if torch.cuda.get_device_capability(device=device) < (7, 5):
+    #    return False
+    if not torch.xpu.is_available():
         return False
-    device_name = torch.cuda.get_device_name(device=device)
-    nvidia16_models = ("GTX 1630", "GTX 1650", "GTX 1660")  # https://en.wikipedia.org/wiki/GeForce_16_series
-    if any(model_name in device_name for model_name in nvidia16_models):
-        return False  # these devices are technically cuda 7.5-capable, but they lack tensor cores
-    """
+    #device_name = torch.cuda.get_device_name(device=device)
+    #nvidia16_models = ("GTX 1630", "GTX 1650", "GTX 1660")  # https://en.wikipedia.org/wiki/GeForce_16_series
+    #if any(model_name in device_name for model_name in nvidia16_models):
+    #    return False  # these devices are technically cuda 7.5-capable, but they lack tensor cores
+    #if  torch.xpu.is_available():
     return True
 
 
@@ -302,7 +303,6 @@ class MatMul8bitLt(torch.autograd.Function):
                 return torch.empty(A.shape[:-1] + B.shape[1:], dtype=A.dtype, device=A.device)
             else:
                 return torch.empty(A.shape[:-1] + B.shape[:1], dtype=A.dtype, device=A.device)
-
         # 1. Quantize A
         # 2. Quantize B
         # 3. Matmul
@@ -312,7 +312,6 @@ class MatMul8bitLt(torch.autograd.Function):
         input_shape = A.shape
         if state.outlier_pool is None:
             state.outlier_pool = GlobalOutlierPooler.get_instance()
-
         # Cast A to fp16
         if A.dtype != torch.float16:
             warnings.warn(f"MatMul8bitLt: inputs will be cast from {A.dtype} to float16 during quantization")
@@ -321,7 +320,8 @@ class MatMul8bitLt(torch.autograd.Function):
         if len(A.shape) == 3:
             A = A.reshape(-1, A.shape[-1])
         CA, CAt, SCA, SCAt, coo_tensorA = F.double_quant(A.to(torch.float16), threshold=state.threshold)
-
+        #print("CA, CAt, SCA, SCAt, coo_tensorA",  CAt, SCA, SCAt, coo_tensorA)
+        state.threshold = 1.0
         if state.threshold > 0.0 and coo_tensorA is not None:
             if state.has_fp16_weights:
                 idx = torch.unique(coo_tensorA.colidx).long()
@@ -339,14 +339,13 @@ class MatMul8bitLt(torch.autograd.Function):
             if not state.has_fp16_weights and state.CxB is None and using_igemmlt:
                 state.CxB, state.SB = F.transform(state.CB, to_order=formatB)
             subA = None
-
         # 2. Quantize B
         if state.has_fp16_weights:
+        
             has_grad = True if (getattr(B, "grad", None) is not None) else False
             is_transposed = not B.is_contiguous() and B.shape[0] == B.stride(1)
             if is_transposed:
                 B = B.contiguous()
-
             if (state.is_training and not has_grad) or state.CxB is None:
                 state.reset_grads()
                 (
@@ -390,7 +389,6 @@ class MatMul8bitLt(torch.autograd.Function):
             output_shape = (input_shape[0], input_shape[1], shapeB[0])
         else:
             output_shape = (input_shape[0], shapeB[0])
-
         # 3. Matmul
         if using_igemmlt:
             C32A, SA = F.transform(CA, "col32")
@@ -399,10 +397,11 @@ class MatMul8bitLt(torch.autograd.Function):
                 # we apply the fused bias here
                 output = F.mm_dequant(out32, Sout32, SCA, state.SCB, bias=bias)
                 output = output.to(A.dtype)
+                print(output)
             else:  # apply bias separately
                 output = F.mm_dequant(out32, Sout32, SCA, state.SCB, bias=None)
                 output = output.to(A.dtype).add_(bias)
-
+                print(output)
         else:
             A_wo_outliers = A.clone()
             if state.idx is not None:
@@ -411,7 +410,7 @@ class MatMul8bitLt(torch.autograd.Function):
             output = output.mul_(state.SCB.unsqueeze(0).mul(1.0 / 127.0))
             if bias is not None:
                 output = output.add_(bias)
-
+        print("gemmm complete")
         # 4. Mixed-precision decomposition matmul
         if coo_tensorA is not None and subA is not None:
             output += torch.matmul(subA, state.subB)
@@ -445,11 +444,10 @@ class MatMul8bitLt(torch.autograd.Function):
         formatB = ctx.formatB
         state = ctx.state
         grad_A = grad_B = grad_bias = None
-
+        
         if req_gradBias:
             # compute grad_bias first before changing grad_output dtype
             grad_bias = grad_output.sum(0, dtype=ctx.dtype_bias)
-
         # Cast grad_output to fp16
         if len(grad_output.shape) == 3:
             grad_output = grad_output.reshape(-1, grad_output.shape[-1]).contiguous()
@@ -462,7 +460,6 @@ class MatMul8bitLt(torch.autograd.Function):
             grad_B = F.mm_dequant(gradB32, SgradB32, SCgradt, SCAt)
             if state.threshold > 0.0 and subA is not None:
                 grad_B[:, idx] += torch.matmul(grad_output.t(), subA)
-
         if req_gradA:
             if state.CBt is not None:
                 C32grad, Sgrad = F.transform(Cgrad, "col32")
@@ -483,7 +480,6 @@ class MatMul8bitLt(torch.autograd.Function):
                 grad_A = torch.matmul(grad_output, CB).view(ctx.grad_shape).to(ctx.dtype_A)
             else:
                 raise Exception("State must contain either CBt or CB or CxB matrix for backward")
-
         return grad_A, grad_B, None, grad_bias, None
 
 

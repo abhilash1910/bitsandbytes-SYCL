@@ -288,7 +288,7 @@ class Optimizer8bit(torch.optim.Optimizer):
                 if torch.xpu.is_available():
                     torch.xpu.synchronize()
                 else:
-                  torch.cuda.synchronize()
+                    torch.cuda.synchronize()
         if self.is_paged:
             # all paged operation are asynchronous, we need
             # to sync to make sure all tensors are in the right state

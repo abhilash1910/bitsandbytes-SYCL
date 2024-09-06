@@ -18,7 +18,7 @@ def test_linear_no_igemmlt():
     linear_custom.state.force_no_igemmlt = False
 
     linear_custom.weight = Int8Params(
-        linear.weight.data.clone(), requires_grad=False, has_fp16_weights=False
+        linear.weight.data.clone(), requires_grad=False, has_fp16_weights=True
     ).to(linear.weight.dtype)
     linear_custom.bias = linear.bias
     linear_custom = linear_custom.xpu()

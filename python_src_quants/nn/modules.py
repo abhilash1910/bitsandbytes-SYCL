@@ -19,6 +19,7 @@ from python_src_quants.utils import (
     LINEAR_8BIT_WEIGHTS_FORMAT_MAPPING,
     OutlierTracer,
 )
+import intel_extension_for_pytorch
 
 T = TypeVar("T", bound="torch.nn.Module")
 
@@ -272,7 +273,7 @@ class Params4bit(torch.nn.Parameter):
         data: torch.Tensor,
         quantized_stats: Dict[str, Any],
         requires_grad: bool = False,
-        device="cuda",
+        device="xpu",
         **kwargs,
     ) -> "Params4bit":
         self = torch.Tensor._make_subclass(cls, data.to(device))
@@ -289,7 +290,7 @@ class Params4bit(torch.nn.Parameter):
 
     def _quantize(self, device):
         w = self.data.contiguous().to(device)
-        w_4bit, quant_state = bnb.functional.quantize_4bit(
+        w_4bit, quant_state = python_src_quants.functional.quantize_4bit(
             w,
             blocksize=self.blocksize,
             compress_statistics=self.compress_statistics,
@@ -303,8 +304,8 @@ class Params4bit(torch.nn.Parameter):
         self.bnb_quantized = True
         return self
 
-    def cuda(self, device: Optional[Union[int, device, str]] = None, non_blocking: bool = False):
-        return self.to(device="cuda" if device is None else device, non_blocking=non_blocking)
+    def xpu(self, device: Optional[Union[int, device, str]] = None, non_blocking: bool = False):
+        return self.to(device="xpu" if device is None else device, non_blocking=non_blocking)
 
     @overload
     def to(
@@ -323,7 +324,7 @@ class Params4bit(torch.nn.Parameter):
     def to(self, *args, **kwargs):
         device, dtype, non_blocking, convert_to_format = torch._C._nn._parse_to(*args, **kwargs)
 
-        if device is not None and device.type == "cuda" and not self.bnb_quantized:
+        if device is not None and device.type == "xpu" and not self.bnb_quantized:
             return self._quantize(device)
         else:
             if self.quant_state is not None:
@@ -469,7 +470,7 @@ class Linear4bit(nn.Linear):
             x = x.to(self.compute_dtype)
 
         bias = None if self.bias is None else self.bias.to(self.compute_dtype)
-        out = bnb.matmul_4bit(x, self.weight.t(), bias=bias, quant_state=self.weight.quant_state)
+        out = python_src_quants.matmul_4bit(x, self.weight.t(), bias=bias, quant_state=self.weight.quant_state)
 
         out = out.to(inp_dtype)
 
@@ -572,19 +573,19 @@ class Int8Params(torch.nn.Parameter):
         obj.has_fp16_weights = has_fp16_weights
         return obj
 
-    def cuda(self, device):
-        if self.has_fp16_weights:
-            return super().cuda(device)
-        else:
+    def xpu(self, device):
+        #if not self.has_fp16_weights:
+        #    return super().xpu(device)
+        #else:
             # we store the 8-bit rows-major weight
             # we convert this weight to the turning/ampere weight during the first inference pass
-            B = self.data.contiguous().half().cuda(device)
-            CB, CBt, SCB, SCBt, coo_tensorB = bnb.functional.double_quant(B)
-            del CBt
-            del SCBt
-            self.data = CB
-            self.CB = CB
-            self.SCB = SCB
+        B = self.data.contiguous().half().xpu(device)
+        CB, CBt, SCB, SCBt, coo_tensorB = double_quant(B)
+        del CBt
+        del SCBt
+        self.data = CB
+        self.CB = CB
+        self.SCB = SCB
 
         return self
 
@@ -617,8 +618,8 @@ class Int8Params(torch.nn.Parameter):
     def to(self, *args, **kwargs):
         device, dtype, non_blocking, convert_to_format = torch._C._nn._parse_to(*args, **kwargs)
 
-        if device is not None and device.type == "cuda" and self.data.device.type == "cpu":
-            return self.cuda(device)
+        if device is not None and device.type == "xpu" and self.data.device.type == "cpu":
+            return self.xpu(device)
         else:
             new_param = Int8Params(
                 super().to(device=device, dtype=dtype, non_blocking=non_blocking),
@@ -860,7 +861,7 @@ class SwitchBackLinearBnb(nn.Linear):
         device=None,
     ):
         super().__init__(input_features, output_features, bias, device)
-        self.state = MatmulLtState()
+        self.state = python_src_quants.MatmulLtState()
         self.index = index
 
         self.state.threshold = threshold
@@ -883,4 +884,4 @@ class SwitchBackLinearBnb(nn.Linear):
         if self.weight.CB is not None:
             self.init_8bit_state()
 
-        out = bnb.matmul_mixed(x.half(), self.weight.half(), bias=None, state=self.state) + self.bias
+        out = python_src_quants.matmul_mixed(x.half(), self.weight.half(), bias=None, state=self.state) + self.bias
