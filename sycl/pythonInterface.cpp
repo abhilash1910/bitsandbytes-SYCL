@@ -314,11 +314,11 @@ extern "C"
 
 	int cigemmlt_ampere_8(int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
 	{ return igemmlt_ampere_8(m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
-/*
+
   #define MAKE_FUNC_CTRANSFORM(fbits, fsrc, ftrgt, ftranspose, dtype, src, target, transpose, bits) \
-	void ctransform_##fbits##_##fsrc##_to_##ftrgt##_##ftranspose(Context *context, dtype *A, dtype *out, int dim1, int dim2) \
+	void ctransform_##fbits##_##fsrc##_to_##ftrgt##_##ftranspose(dpct::queue_ptr ltHandle, dtype *A, dtype *out, int dim1, int dim2) \
 	{ \
-		transform_##fbits##_##fsrc##_to_##ftrgt##_##ftranspose((cublasLtHandle_t) context->m_handle, A, out, dim1, dim2); \
+		transform_##fbits##_##fsrc##_to_##ftrgt##_##ftranspose(ltHandle, A, out, dim1, dim2); \
 	} \
 
 	MAKE_FUNC_CTRANSFORM(8, row, col, n, int8_t, ROW, COL, false, 8)
@@ -355,7 +355,7 @@ extern "C"
 
 	void ctransform_row2ampereT(char * A, char *out, int rows, int cols)
 	{ transform_row2ampereT(A, out, rows, cols); }
-
+/*
 	void cspmm_coo(ContextCusparse *context, int *A_rowidx, int *A_colidx, sycl::half *A_vals, int A_nnz, int A_rows, int A_cols, int B_cols, int ldb, sycl::half *B, int ldc, sycl::half* C, bool transposed_B)
   { spmm_coo((cusparseHandle_t) context->m_handle, A_rowidx, A_colidx, A_vals, A_nnz, A_rows, A_cols, B_cols, ldb, B, ldc, C, transposed_B); }
 */
