@@ -23,6 +23,15 @@
 #define NUM 4
 #define NUM_BLOCK 4096
 
+//================typedefs===================================
+
+typedef sycl::local_accessor<uint8_t, 1> sycl_la;
+typedef sycl::accessor<int, 1> sycl_dacc;
+typedef sycl::accessor<float, 1> sycl_dacc_float;
+typedef sycl::accessor<unsigned char, 1> sycl_dacc_uc;
+//===========================================================
+
+
 /// Load linear segment items into block format across threads
 /// Helper for Block Load
 namespace dpct{
@@ -1055,12 +1064,6 @@ void kCompressMax(T * __restrict__ const A, T* out, unsigned char* out_idx, cons
 #define BLOCK_ESTIMATE 4096
 
 
-//================typedefs===================================
-
-typedef sycl::local_accessor<uint8_t, 1> sycl_la;
-typedef sycl::accessor<int, 1> sycl_dacc;
-typedef sycl::accessor<float, 1> sycl_dacc_float;
-typedef sycl::accessor<unsigned char, 1> sycl_dacc_uc;
 
 //======================estimte quantiles=====================================
 
