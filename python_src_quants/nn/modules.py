@@ -11,8 +11,8 @@ from torch import Tensor, device, dtype, nn
 import torch.nn.functional as F
 
 import bitsandbytes as bnb
-from python_src_quants.autograd._functions import get_tile_inds, undo_layout
-from python_src_quants.functional import QuantState
+from python_src_quants.autograd._functions import get_tile_inds, undo_layout, MatmulLtState, matmul
+from python_src_quants.functional import QuantState, double_quant
 from python_src_quants.optim import GlobalOptimManager
 from python_src_quants.utils import (
     INVERSE_LINEAR_8BIT_WEIGHTS_FORMAT_MAPPING,
@@ -289,7 +289,7 @@ class Params4bit(torch.nn.Parameter):
 
     def _quantize(self, device):
         w = self.data.contiguous().to(device)
-        w_4bit, quant_state = bnb.functional.quantize_4bit(
+        w_4bit, quant_state = python_src_quants.functional.quantize_4bit(
             w,
             blocksize=self.blocksize,
             compress_statistics=self.compress_statistics,
@@ -469,7 +469,7 @@ class Linear4bit(nn.Linear):
             x = x.to(self.compute_dtype)
 
         bias = None if self.bias is None else self.bias.to(self.compute_dtype)
-        out = bnb.matmul_4bit(x, self.weight.t(), bias=bias, quant_state=self.weight.quant_state)
+        out = python_src_quants.matmul_4bit(x, self.weight.t(), bias=bias, quant_state=self.weight.quant_state)
 
         out = out.to(inp_dtype)
 
@@ -579,7 +579,7 @@ class Int8Params(torch.nn.Parameter):
             # we store the 8-bit rows-major weight
             # we convert this weight to the turning/ampere weight during the first inference pass
             B = self.data.contiguous().half().cuda(device)
-            CB, CBt, SCB, SCBt, coo_tensorB = bnb.functional.double_quant(B)
+            CB, CBt, SCB, SCBt, coo_tensorB = double_quant(B)
             del CBt
             del SCBt
             self.data = CB
@@ -709,7 +709,7 @@ class Linear8bitLt(nn.Linear):
         """
         super().__init__(input_features, output_features, bias, device)
         assert not memory_efficient_backward, "memory_efficient_backward is no longer required and the argument is deprecated in 0.37.0 and will be removed in 0.39.0"
-        self.state = bnb.MatmulLtState()
+        self.state = MatmulLtState()
         self.index = index
 
         self.state.threshold = threshold
@@ -809,7 +809,7 @@ class Linear8bitLt(nn.Linear):
         if self.bias is not None and self.bias.dtype != x.dtype:
             self.bias.data = self.bias.data.to(x.dtype)
 
-        out = bnb.matmul(x, self.weight, bias=self.bias, state=self.state)
+        out = matmul(x, self.weight, bias=self.bias, state=self.state)
 
         if not self.state.has_fp16_weights:
             if self.state.CB is not None and self.state.CxB is not None:
@@ -860,7 +860,7 @@ class SwitchBackLinearBnb(nn.Linear):
         device=None,
     ):
         super().__init__(input_features, output_features, bias, device)
-        self.state = bnb.MatmulLtState()
+        self.state = python_src_quants.MatmulLtState()
         self.index = index
 
         self.state.threshold = threshold
@@ -883,4 +883,4 @@ class SwitchBackLinearBnb(nn.Linear):
         if self.weight.CB is not None:
             self.init_8bit_state()
 
-        out = bnb.matmul_mixed(x.half(), self.weight.half(), bias=None, state=self.state) + self.bias
+        out = python_src_quants.matmul_mixed(x.half(), self.weight.half(), bias=None, state=self.state) + self.bias

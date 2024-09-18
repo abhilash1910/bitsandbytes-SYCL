@@ -1,3 +1,4 @@
+
 # This CMake config hopefully makes it easier to compile.
 # Ensure the CUDA Toolkit is available on your path. Then run:
 #   For  GCC: `cmake -B build . && cmake --build build`
@@ -24,11 +25,11 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Define included source files
-set(CPP_FILES sycl/common.cpp sycl/cpu_ops.cpp sycl/pythonInterface.cpp)
+set(CPP_FILES sycl/common.cpp sycl/cpu_ops.cpp )
 #set(CUDA_FILES csrc/ops.cu csrc/kernels.cu)
 #set(MPS_FILES csrc/mps_ops.mm)
 #set(METAL_FILES csrc/mps_kernels.metal)
-set(SYCL_FILES  sycl/sycl_code/kernel_quant.cpp sycl/sycl_code/op_quant.cpp) 
+set(SYCL_FILES  sycl/pythonInterface.cpp sycl/sycl_code/kernel_quant.cpp sycl/sycl_code/op_quant.cpp sycl/sycl_code/op_gemm.cpp sycl/sycl_code/kernel_gemm.cpp) 
 
 # C++ sources are always included
 list(APPEND SRC_FILES ${CPP_FILES})
@@ -204,6 +205,7 @@ elseif(BUILD_SYCL)
     elseif( SYCL_TARGET STREQUAL "NVIDIA")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsycl-targets=nvptx64-nvidia-cuda")
     endif()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -qmkl=parallel") 
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ferror-limit=200")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
     list(APPEND SRC_FILES ${SYCL_FILES})

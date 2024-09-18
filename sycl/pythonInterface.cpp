@@ -2,11 +2,11 @@
 //
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
-
-#include <ops.h>
+#include "sycl_code/ops.h"
 #include <cpu_ops.h>
 #include <sycl/sycl.hpp>
 #include "sycl/sycl_code/common_templates.h"
+
 // We cannot call templated code from C, so we wrap the template in a C compatible call here if necessary.
 // We use macro functions to expand all the different optimizers. Looks ugly, and is ugly, but its better than to
 // maintain all that boilerplate
@@ -18,9 +18,9 @@ void estimateQuantiles_fp32(float *A, float *code, float offset, int n){ estimat
 void estimateQuantiles_fp16(sycl::half *A, float *code, float offset, int n){ estimateQuantiles<sycl::half>(A, code, offset, n); }
 
 
-//void gemm_host_fp32(int M, int N, int K, float * A,  float* B,  float * out,  int lda, int ldb, int ldc)
-//{ gemm_host<float>(M, N, K, A, B, out, lda, ldb, ldc, 32); }
-/*
+void gemm_host_fp32(int M, int N, int K, float * A,  float* B,  float * out,  int lda, int ldb, int ldc)
+{ gemm_host<float>(M, N, K, A, B, out, lda, ldb, ldc, 32); }
+
 void gemm_host_fp16(int M, int N, int K, sycl::half * A,  sycl::half* B,  sycl::half * out,  int lda, int ldb, int ldc)
 { gemm_host<sycl::half>(M, N, K, A, B, out, lda, ldb, ldc, 16); }
 
@@ -35,7 +35,7 @@ void gemm_4bit_inference_naive_bf16(int m, int n, int k, sycl::ext::oneapi::bflo
 
 void gemm_4bit_inference_naive_fp32(int m, int n, int k, float * A,  unsigned char* B,  float *absmax, float *datatype, float * out,  int lda, int ldb, int ldc, int blocksize)
 { gemm_4bit_inference_naive<float, 32>(m, n, k, A, B, absmax,  datatype, out, lda, ldb, ldc, blocksize); }
-*/
+
 
 #define MAKE_ELEMENTWISE_FUNC(fname, type_name, ctype, FUNC) \
 void fname##_##type_name(ctype *A, ctype *B, ctype value, long n){ func<ctype, FUNC>(A, B, value, n); } \
@@ -135,9 +135,9 @@ void dequantizeBlockwise_bf16(float *code, unsigned char *A, float *absmax, sycl
 void dequantizeBlockwise_bf16_fp4(float *code, unsigned char *A, float *absmax, sycl::ext::oneapi::bfloat16 *out, int blocksize, const int n){ dequantizeBlockwise<sycl::ext::oneapi::bfloat16, FP4>(NULL, A, absmax, out, blocksize, n); }
 void dequantizeBlockwise_bf16_nf4(float *code, unsigned char *A, float *absmax, sycl::ext::oneapi::bfloat16 *out, int blocksize, const int n){ dequantizeBlockwise<sycl::ext::oneapi::bfloat16, NF4>(NULL, A, absmax, out, blocksize, n); }
 
-/*
+
 #define MAKE_FUNC_TRANSFORM(fbits, fsrc, ftrgt, ftranspose, dtype, src, target, transpose, bits) \
-void transform_##fbits##_##fsrc##_to_##ftrgt##_##ftranspose(cublasLtHandle_t ltHandle, dtype *A, dtype *out, int dim1, int dim2) \
+void transform_##fbits##_##fsrc##_to_##ftrgt##_##ftranspose( dpct::queue_ptr ltHandle, dtype *A, dtype *out, int dim1, int dim2) \
 { \
 	transform<dtype, src, target, transpose, bits>(ltHandle, A, out, dim1, dim2); \
 } \
@@ -150,7 +150,7 @@ MAKE_FUNC_TRANSFORM(8, row, col_turing, n, int8_t, ROW, COL_TURING, false, 8);
 MAKE_FUNC_TRANSFORM(8, row, col_ampere, n, int8_t, ROW, COL_AMPERE, false, 8);
 MAKE_FUNC_TRANSFORM(8, col32, row, n, int8_t, COL32, ROW, false, 8);
 MAKE_FUNC_TRANSFORM(32, col32, row, n, int32_t, COL32, ROW, false, 32);
-*/
+
 void transform_row2col32(char * A, char *out, int rows, int cols){ transformRowToFormat<COL32, 0>(A, out, rows, cols); }
 void transform_row2col32T(char * A, char *out, int rows, int cols){ transformRowToFormat<COL32, 1>(A, out, rows, cols); }
 void transform_row2turing(char * A, char *out, int rows, int cols){ transformRowToFormat<COL_TURING, 0>(A, out, rows, cols); }
@@ -161,31 +161,32 @@ void transform_row2ampereT(char * A, char *out, int rows, int cols){ transformRo
 void extractOutliers_turing(char * A, int *idx, char *out, int idx_size, int rows, int cols){ extractOutliers<COL_TURING>(A, idx, out, idx_size, rows, cols); }
 void extractOutliers_ampere(char * A, int *idx, char *out, int idx_size, int rows, int cols){ extractOutliers<COL_AMPERE>(A, idx, out, idx_size, rows, cols); }
 
-/*
- int igemmlt_turing_32(cublasLtHandle_t ltHandle, int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
-	{ return igemmlt<COL_TURING, 32, 0>(ltHandle, m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
 
- int igemmlt_turing_8(cublasLtHandle_t ltHandle, int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
-	{ return igemmlt<COL_TURING, 8, 0>(ltHandle, m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
+ int igemmlt_turing_32( int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
+	{ return igemmlt<COL_TURING, 32, 0>( m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
 
- int igemmlt_turing_8_rowscale(cublasLtHandle_t ltHandle, int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
-	{ return igemmlt<COL_TURING, 8, 1>(ltHandle, m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
+ int igemmlt_turing_8( int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
+	{ return igemmlt<COL_TURING, 8, 0>(m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
 
- int igemmlt_ampere_32(cublasLtHandle_t ltHandle, int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
-	{ return igemmlt<COL_AMPERE, 32, 0>(ltHandle, m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
+ int igemmlt_turing_8_rowscale( int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
+	{ return igemmlt<COL_TURING, 8, 1>( m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
 
- int igemmlt_ampere_8(cublasLtHandle_t ltHandle, int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
-	{ return igemmlt<COL_AMPERE, 8, 0>(ltHandle, m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
+ int igemmlt_ampere_32( int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
+	{ return igemmlt<COL_AMPERE, 32, 0>( m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
 
- int igemmlt_ampere_8_rowscale(cublasLtHandle_t ltHandle, int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
-	{ return igemmlt<COL_AMPERE, 8, 1>(ltHandle, m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
+ int igemmlt_ampere_8(int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
+	{ return igemmlt<COL_AMPERE, 8, 0>(m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
+
+ int igemmlt_ampere_8_rowscale(int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
+	{ return igemmlt<COL_AMPERE, 8, 1>( m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
+  
 
 void spmm_coo_very_sparse_naive_fp16(int *max_count, int *max_idx, int *offset_rowidx, int *rowidx, int *colidx, sycl::half *values, sycl::half *B, sycl::half *out, float *dequant_stats, int nnz_rows, int nnz, int rowsA, int rowsB, int colsB)
 { spmm_coo_very_sparse_naive<sycl::half, 16>(max_count, max_idx, offset_rowidx, rowidx, colidx, values, B, out, dequant_stats, nnz_rows, nnz, rowsA, rowsB, colsB); }
 
 void spmm_coo_very_sparse_naive_int8(int *max_count, int *max_idx, int *offset_rowidx, int *rowidx, int *colidx, sycl::half *values, signed char *B, sycl::half *out, float *dequant_stats, int nnz_rows, int nnz, int rowsA, int rowsB, int colsB)
 { spmm_coo_very_sparse_naive<signed char, 8>(max_count, max_idx, offset_rowidx, rowidx, colidx, values, B, out, dequant_stats, nnz_rows, nnz, rowsA, rowsB, colsB); }
-*/
+
 
 
 extern "C"
@@ -284,7 +285,7 @@ extern "C"
 	void cpercentile_clipping_g16(sycl::half * g, float *gnorm_vec, int step, const int n){ percentileClipping_g16(g, gnorm_vec, step, n); }
 	void chistogram_scatter_add_2d(float* histogram, int *index1, int *index2, float *src, int maxidx1, int n){ histogramScatterAdd2D(histogram, index1, index2, src, maxidx1, n); }
 
-/*
+
 	void cigemm(Context *context, bool transposeA, bool transposeB, int m, int n, int k, void *A, void *B, void *C, int lda, int ldb, int ldc)
 	{ gemmex(context, transposeA, transposeB, m, n, k, A, B, C, lda, ldb, ldc); }
 	void cbatched_igemm(Context *context, bool transposeA, bool transposeB, int m, int n, int k, void *A, void *B, void *C, int lda, int ldb, int ldc,
@@ -294,30 +295,30 @@ extern "C"
 	Context *get_context(){ return new Context(); }
 	ContextCusparse *get_cusparse(){ return new ContextCusparse(); }
 
-	int cigemmlt_turing_32(Context *context, int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
-	{ return igemmlt_turing_32((cublasLtHandle_t) context->m_handle, m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
+	int cigemmlt_turing_32(int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
+	{ return igemmlt_turing_32(m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
 	//{ (cublasLtHandle_t)context->m_handle; return 0; }
 	//{ return 0; }//igemmlt_turing_32((cublasLtHandle_t) context->m_handle, m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
 
-	int cigemmlt_turing_8(Context *context, int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
-	{ return igemmlt_turing_8((cublasLtHandle_t) context->m_handle, m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
+	int cigemmlt_turing_8(int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
+	{ return igemmlt_turing_8( m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
 
-	int cigemmlt_turing_8_rowscale(Context *context, int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
-	{ return igemmlt_turing_8_rowscale((cublasLtHandle_t) context->m_handle, m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
+	int cigemmlt_turing_8_rowscale(int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
+	{ return igemmlt_turing_8_rowscale( m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
 
-	int cigemmlt_ampere_32(Context *context, int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
-	{ return igemmlt_ampere_32((cublasLtHandle_t) context->m_handle, m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
+	int cigemmlt_ampere_32(int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
+	{ return igemmlt_ampere_32( m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
 
-	int cigemmlt_ampere_8_rowscale(Context *context, int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
-	{ return igemmlt_ampere_8_rowscale((cublasLtHandle_t) context->m_handle, m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
+	int cigemmlt_ampere_8_rowscale(int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
+	{ return igemmlt_ampere_8_rowscale(m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
 
-	int cigemmlt_ampere_8(Context *context, int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
-	{ return igemmlt_ampere_8((cublasLtHandle_t) context->m_handle, m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
+	int cigemmlt_ampere_8(int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc)
+	{ return igemmlt_ampere_8(m, n, k, A, B, C, row_scale, lda, ldb, ldc); }
 
   #define MAKE_FUNC_CTRANSFORM(fbits, fsrc, ftrgt, ftranspose, dtype, src, target, transpose, bits) \
-	void ctransform_##fbits##_##fsrc##_to_##ftrgt##_##ftranspose(Context *context, dtype *A, dtype *out, int dim1, int dim2) \
+	void ctransform_##fbits##_##fsrc##_to_##ftrgt##_##ftranspose(dpct::queue_ptr ltHandle, dtype *A, dtype *out, int dim1, int dim2) \
 	{ \
-		transform_##fbits##_##fsrc##_to_##ftrgt##_##ftranspose((cublasLtHandle_t) context->m_handle, A, out, dim1, dim2); \
+		transform_##fbits##_##fsrc##_to_##ftrgt##_##ftranspose(ltHandle, A, out, dim1, dim2); \
 	} \
 
 	MAKE_FUNC_CTRANSFORM(8, row, col, n, int8_t, ROW, COL, false, 8)
@@ -328,7 +329,7 @@ extern "C"
 	MAKE_FUNC_CTRANSFORM(8, row, col_ampere, n, int8_t, ROW, COL_AMPERE, false, 8)
 	MAKE_FUNC_CTRANSFORM(8, col32, row, n, int8_t, COL32, ROW, false, 8)
 	MAKE_FUNC_CTRANSFORM(32, col32, row, n, int32_t, COL32, ROW, false, 32)
-*/
+
 	void cdequant_mm_int32_fp16(int *A, float *rowStats, float *colStats, sycl::half *out, float* newRowStats, float* newcolStats, sycl::half* bias, int numRows, int numCols)
 	{ dequant_mm_int32_fp16(A, rowStats, colStats, out, newRowStats, newcolStats, bias, numRows, numCols); }
 	void cget_col_row_stats(sycl::half * A, float *rowStats, float *colStats, int *nnz_count_row, float nnz_threshold, int rows, int cols)
@@ -357,16 +358,16 @@ extern "C"
 /*
 	void cspmm_coo(ContextCusparse *context, int *A_rowidx, int *A_colidx, sycl::half *A_vals, int A_nnz, int A_rows, int A_cols, int B_cols, int ldb, sycl::half *B, int ldc, sycl::half* C, bool transposed_B)
   { spmm_coo((cusparseHandle_t) context->m_handle, A_rowidx, A_colidx, A_vals, A_nnz, A_rows, A_cols, B_cols, ldb, B, ldc, C, transposed_B); }
-
+*/
 	void cspmm_coo_very_sparse_naive_fp16(int *max_count, int *max_idx, int *offset_rowidx, int *rowidx, int *colidx, sycl::half *values, sycl::half *B, sycl::half *out, float *dequant_stats, int nnz_rows, int nnz, int rowsA, int rowsB, int colsB)
 	{ spmm_coo_very_sparse_naive_fp16(max_count, max_idx, offset_rowidx, rowidx, colidx, values, B, out, dequant_stats, nnz_rows, nnz, rowsA, rowsB, colsB); }
 
 	void cspmm_coo_very_sparse_naive_int8(int *max_count, int *max_idx, int *offset_rowidx, int *rowidx, int *colidx, sycl::half *values, signed char *B, sycl::half *out, float *dequant_stats, int nnz_rows, int nnz, int rowsA, int rowsB, int colsB)
 	{ spmm_coo_very_sparse_naive_int8(max_count, max_idx, offset_rowidx, rowidx, colidx, values, B, out, dequant_stats, nnz_rows, nnz, rowsA, rowsB, colsB); }
-*/
+
 	void cextractOutliers_turing(char * A, int *idx, char *out, int idx_size, int rows, int cols){ extractOutliers_turing(A, idx, out, idx_size, rows, cols); }
 	void cextractOutliers_ampere(char * A, int *idx, char *out, int idx_size, int rows, int cols){ extractOutliers_ampere(A, idx, out, idx_size, rows, cols); }
-/*
+
 	//void cgemm_host_fp32(int M, int N, int K, float * A,  float* B,  float * out,  int lda, int ldb, int ldc)
 	//{ gemm_host_fp32(M, N, K, A, B, out, lda, ldb, ldc); }
 
@@ -379,8 +380,8 @@ extern "C"
 	void *cget_managed_ptr(size_t bytes)
 	{
 		void *ptr;
-		CUDA_CHECK_RETURN(cudaMallocManaged(&ptr, bytes, cudaMemAttachHost));
-		CUDA_CHECK_RETURN(cudaPeekAtLastError());
+		//CUDA_CHECK_RETURN(cudaMallocManaged(&ptr, bytes, cudaMemAttachHost));
+		//CUDA_CHECK_RETURN(cudaPeekAtLastError());
 
 		return ptr;
 	}
@@ -389,11 +390,11 @@ extern "C"
 	{
 
 		int hasPrefetch = 0;
-		CUDA_CHECK_RETURN(cudaDeviceGetAttribute(&hasPrefetch, cudaDevAttrConcurrentManagedAccess, device)); // 40ns overhead
+		//CUDA_CHECK_RETURN(cudaDeviceGetAttribute(&hasPrefetch, cudaDevAttrConcurrentManagedAccess, device)); // 40ns overhead
 		if (hasPrefetch == 0) return;
 
-		CUDA_CHECK_RETURN(cudaMemPrefetchAsync(ptr, bytes, device, 0));
-		CUDA_CHECK_RETURN(cudaPeekAtLastError());
+		//CUDA_CHECK_RETURN(cudaMemPrefetchAsync(ptr, bytes, device, 0));
+		//CUDA_CHECK_RETURN(cudaPeekAtLastError());
 	}
 
   #define CMAKE_ELEMENTWISE_FUNC(fname, type_name, ctype, FUNC) \
@@ -412,10 +413,10 @@ extern "C"
 
 	void cgemm_4bit_inference_naive_fp32(int m, int n, int k, float * A,  unsigned char* B,  float *absmax, float *datatype, float * out,  int lda, int ldb, int ldc, int blocksize)
 	{ gemm_4bit_inference_naive_fp32(m, n, k, A, B, absmax,  datatype, out, lda, ldb, ldc, blocksize); }
-*/
 
-/*
+
+
 	void cquantize_blockwise_cpu_fp32(float *code, float *A, float *absmax, unsigned char *out, long long blocksize, long long n){ quantize_cpu(code, A, absmax, out, blocksize, n); }
 	void cdequantize_blockwise_cpu_fp32(float *code, unsigned char *A, float *absmax, float *out, long long blocksize, long long n){ dequantize_cpu(code, A, absmax, out, blocksize, n); }
- */
+ 
 }

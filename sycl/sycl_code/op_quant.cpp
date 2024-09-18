@@ -49,6 +49,7 @@ int fill_up_to_nearest_multiple(int value, int multiple)
 
 namespace dpct{
 namespace group{
+/*
 enum load_algorithm {
 
   BLOCK_LOAD_DIRECT,
@@ -149,7 +150,7 @@ private:
   uint8_t *_local_memory;
 };
 
-
+*/
 
 
 

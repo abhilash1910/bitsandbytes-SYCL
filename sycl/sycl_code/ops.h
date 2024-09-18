@@ -2,6 +2,10 @@
 //
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
+// Copyright (c) Facebook, Inc. and its affiliates.
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
 
 #pragma once
 #ifndef ops_H
@@ -212,5 +216,6 @@ template <typename T> void gemm_4bit_inference(int m, int n, int k, T * A,  unsi
 template <typename T, int BITS> void gemm_4bit_inference_naive(int m, int n, int k, T * A,  unsigned char* B,  float *absmax, float *datatype, T * out,  int lda, int ldb, int ldc, int blocksize);
 
 template <typename T, int FUNC> void func(T *A, T *B, T value, long n);
+template <int FORMATB, int DTYPE_OUT, int SCALE_ROWS> int igemmlt(int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc);
 
 #endif
