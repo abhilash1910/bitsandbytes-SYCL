@@ -1,0 +1,2577 @@
+/home/majumder/bb_sycl_samples_fresh/bitsandbytes_sycl_samples/python_src_quants/libbitsandbytes_sycl.so
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 7.022470235824585
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 9.363293647766113
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 11.704117059707642
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 14.04494047164917
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 16.3857638835907
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 18.726587295532227
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 21.067410707473755
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 23.408234119415283
+Epoch [1/5], Step [10/32], Loss: 2.3408
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 7.022470235824585
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 9.363293647766113
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 11.704117059707642
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 14.04494047164917
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 16.3857638835907
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 18.726587295532227
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 21.067410707473755
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 23.408234119415283
+Epoch [1/5], Step [20/32], Loss: 2.3408
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 7.022470235824585
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 9.363293647766113
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 11.704117059707642
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 14.04494047164917
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 16.3857638835907
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 18.726587295532227
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 21.067410707473755
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 23.408234119415283
+Epoch [1/5], Step [30/32], Loss: 2.3408
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (8, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (8, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 7.022470235824585
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 9.363293647766113
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 11.704117059707642
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 14.04494047164917
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 16.3857638835907
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 18.726587295532227
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 21.067410707473755
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 23.408234119415283
+Epoch [2/5], Step [10/32], Loss: 2.3408
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 7.022470235824585
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 9.363293647766113
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 11.704117059707642
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 14.04494047164917
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 16.3857638835907
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 18.726587295532227
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 21.067410707473755
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 23.408234119415283
+Epoch [2/5], Step [20/32], Loss: 2.3408
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 7.022470235824585
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 9.363293647766113
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 11.704117059707642
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 14.04494047164917
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 16.3857638835907
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 18.726587295532227
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 21.067410707473755
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 23.408234119415283
+Epoch [2/5], Step [30/32], Loss: 2.3408
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (8, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (8, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 7.022470235824585
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 9.363293647766113
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 11.704117059707642
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 14.04494047164917
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 16.3857638835907
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 18.726587295532227
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 21.067410707473755
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 23.408234119415283
+Epoch [3/5], Step [10/32], Loss: 2.3408
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 7.022470235824585
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 9.363293647766113
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 11.704117059707642
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 14.04494047164917
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 16.3857638835907
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 18.726587295532227
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 21.067410707473755
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 23.408234119415283
+Epoch [3/5], Step [20/32], Loss: 2.3408
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 7.022470235824585
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 9.363293647766113
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 11.704117059707642
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 14.04494047164917
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 16.3857638835907
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 18.726587295532227
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 21.067410707473755
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 23.408234119415283
+Epoch [3/5], Step [30/32], Loss: 2.3408
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (8, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (8, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 7.022470235824585
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 9.363293647766113
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 11.704117059707642
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 14.04494047164917
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 16.3857638835907
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 18.726587295532227
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 21.067410707473755
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 23.408234119415283
+Epoch [4/5], Step [10/32], Loss: 2.3408
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 7.022470235824585
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 9.363293647766113
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 11.704117059707642
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 14.04494047164917
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 16.3857638835907
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 18.726587295532227
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 21.067410707473755
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 23.408234119415283
+Epoch [4/5], Step [20/32], Loss: 2.3408
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 7.022470235824585
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 9.363293647766113
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 11.704117059707642
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 14.04494047164917
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 16.3857638835907
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 18.726587295532227
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 21.067410707473755
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 23.408234119415283
+Epoch [4/5], Step [30/32], Loss: 2.3408
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (8, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (8, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 7.022470235824585
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 9.363293647766113
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 11.704117059707642
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 14.04494047164917
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 16.3857638835907
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 18.726587295532227
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 21.067410707473755
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 23.408234119415283
+Epoch [5/5], Step [10/32], Loss: 2.3408
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 7.022470235824585
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 9.363293647766113
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 11.704117059707642
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 14.04494047164917
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 16.3857638835907
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 18.726587295532227
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 21.067410707473755
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 23.408234119415283
+Epoch [5/5], Step [20/32], Loss: 2.3408
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 7.022470235824585
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 9.363293647766113
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 11.704117059707642
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 14.04494047164917
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 16.3857638835907
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 18.726587295532227
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 21.067410707473755
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 23.408234119415283
+Epoch [5/5], Step [30/32], Loss: 2.3408
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (32, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 2.3408234119415283
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (8, 256)
+Initiate Matmul
+performing mul
+gemmm complete
+MatMul8bitLt: inputs will be cast from torch.float32 to float16 during quantization
+double quant done
+quasnt b
+output shape (8, 10)
+Initiate Matmul
+performing mul
+gemmm complete
+Loss
+Loss: 4.681646823883057
+Training complete.

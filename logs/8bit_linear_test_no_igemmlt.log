@@ -1,0 +1,12 @@
+/home/majumder/bb_sycl_samples_fresh/bitsandbytes_sycl_samples/python_src_quants/libbitsandbytes_sycl.so
+Completed linear layer
+After backward
+MatmulLtState(_tile_indices=None, force_no_igemmlt=False)
+MatMul8bitLt: inputs will be cast from torch.float16 to float16 during quantization
+double quant done
+quasnt b
+output shape (3, 3072)
+Initiate Matmul
+performing mul
+gemmm complete
+After backward

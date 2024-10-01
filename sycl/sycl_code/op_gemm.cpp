@@ -15,6 +15,8 @@
 #include <cassert>
 #include <common.h>
 #include <dpct/lib_common_utils.hpp>
+#include "blas_utils.h"
+
 
 #include <oneapi/dnnl/dnnl.hpp>
 #include <oneapi/dnnl/dnnl_sycl.hpp>
@@ -330,12 +332,114 @@ template<int ORDER> int get_leading_dim(int dim1, int dim2)
   }
 }
 
+template<int ORDER> dpct::blas_gemm::experimental::order_t get_order()
+{
+	switch(ORDER)
+	{
+		case ROW:
+      return dpct::blas_gemm::experimental::order_t::row;
+			break;
+    case COL:
+      return dpct::blas_gemm::experimental::order_t::col;
+      break;
+    case COL32:
+      return dpct::blas_gemm::experimental::order_t::col32;
+      break;
+    case COL_TURING:
+      return dpct::blas_gemm::experimental::order_t::col4_4r2_8c;
+      break;
+    case COL_AMPERE:
+      return dpct::blas_gemm::experimental::order_t::col32_2r_4r4;
+      break;
+		default:
+			break;
+  }
+
+	return dpct::blas_gemm::experimental::order_t::row;
+}
+template dpct::blas_gemm::experimental::order_t get_order<ROW>();
+template dpct::blas_gemm::experimental::order_t get_order<COL>();
+template dpct::blas_gemm::experimental::order_t get_order<COL32>();
+template dpct::blas_gemm::experimental::order_t get_order<COL_TURING>();
+template dpct::blas_gemm::experimental::order_t get_order<COL_AMPERE>();
+
 template int get_leading_dim<ROW>(int dim1, int dim2);
 template int get_leading_dim<COL>(int dim1, int dim2);
 template int get_leading_dim<COL32>(int dim1, int dim2);
 
 //=================================transform GEMM==============================
 
+template <typename T, int SRC, int TARGET, bool transpose, int DTYPE>
+void transform(dpct::queue_ptr ltHandle_, T *A,
+               T *out, int dim1, int dim2)
+{
+#ifdef NO_CUBLASLT
+#else
+  dpct::blas_gemm::experimental::descriptor_ptr ltHandle;
+  dpct::blas_gemm::experimental::order_t orderA = get_order<SRC>();
+  dpct::blas_gemm::experimental::order_t orderOut = get_order<TARGET>();
+  int ldA = get_leading_dim<SRC>(dim1, dim2);
+  int ldOut = get_leading_dim<TARGET>(dim1, dim2);
+
+  dpct::blas_gemm::experimental::matrix_layout_ptr A_desc = NULL,
+                                                   out_desc = NULL;
+  dpct::blas_gemm::experimental::transform_desc_ptr A2Out_desc = NULL;
+  oneapi::mkl::transpose opTranspose = oneapi::mkl::transpose::trans;
+  float transformAlpha = 1.0f, transformBeta = 0.0f;
+
+
+  if(DTYPE == 8)
+  {
+    checkCublasStatus(DPCT_CHECK_ERROR(
+        A_desc = new dpct::blas_gemm::experimental::matrix_layout_t(
+            dpct::library_data_t::real_int8, dim1, dim2, ldA)));
+    checkCublasStatus(DPCT_CHECK_ERROR(
+        out_desc = new dpct::blas_gemm::experimental::matrix_layout_t(
+            dpct::library_data_t::real_int8, dim1, dim2, ldOut)));
+  }
+  else if(DTYPE == 32)
+  {
+    checkCublasStatus(DPCT_CHECK_ERROR(
+        A_desc = new dpct::blas_gemm::experimental::matrix_layout_t(
+            dpct::library_data_t::real_int32, dim1, dim2, ldA)));
+    checkCublasStatus(DPCT_CHECK_ERROR(
+        out_desc = new dpct::blas_gemm::experimental::matrix_layout_t(
+            dpct::library_data_t::real_int32, dim1, dim2, ldOut)));
+  }
+  else
+  {
+    printf("ERROR WRONG TYPE FOR TRANSFORM: %i\n", DTYPE);
+  }
+
+  checkCublasStatus(DPCT_CHECK_ERROR(A_desc->set_attribute(
+      dpct::blas_gemm::experimental::matrix_layout_t::attribute::order,
+      &orderA)));
+  checkCublasStatus(DPCT_CHECK_ERROR(out_desc->set_attribute(
+      dpct::blas_gemm::experimental::matrix_layout_t::attribute::order,
+      &orderOut)));
+
+  checkCublasStatus(DPCT_CHECK_ERROR(
+      A2Out_desc = new dpct::blas_gemm::experimental::transform_desc_t(
+          dpct::library_data_t::real_float)));
+
+  if (transpose) {
+    checkCublasStatus(DPCT_CHECK_ERROR(A2Out_desc->set_attribute(
+        dpct::blas_gemm::experimental::transform_desc_t::attribute::trans_a,
+        &opTranspose)));
+  }
+
+  checkCublasStatus(
+      DPCT_CHECK_ERROR(dpct::blas_gemm::experimental::matrix_transform(
+          A2Out_desc, &transformAlpha, A, A_desc, &transformBeta, NULL, NULL,
+          out, out_desc, 0)));
+
+  if (A_desc) checkCublasStatus(DPCT_CHECK_ERROR(delete (A_desc)));
+  if (out_desc) checkCublasStatus(DPCT_CHECK_ERROR(delete (out_desc)));
+  if (A2Out_desc) checkCublasStatus(DPCT_CHECK_ERROR(delete (A2Out_desc)));
+#endif
+}
+
+/*
 template <typename T, int SRC, int TARGET, bool transpose, int DTYPE> void transform( dpct::queue_ptr ltHandle, T *A, T *out, int dim1, int dim2)
 {
 
@@ -380,7 +484,7 @@ template <typename T, int SRC, int TARGET, bool transpose, int DTYPE> void trans
   stream.wait();
 
 }
-
+*/
 template void transform<int8_t, ROW, COL, false, 8>(dpct::queue_ptr ltHandle, int8_t *A, int8_t *out, int dim1, int dim2);
 template void transform<int8_t, ROW, ROW, false, 8>(dpct::queue_ptr ltHandle,  int8_t *A, int8_t *out, int dim1, int dim2);
 template void transform<int8_t, ROW, COL32, false, 8>(dpct::queue_ptr ltHandle, int8_t *A, int8_t *out, int dim1, int dim2);
@@ -433,7 +537,123 @@ template <int FORMATB, int DTYPE_OUT, int SCALE_ROWS> int igemmlt( int m, int n,
 */
 
 
-#include <oneapi/mkl.hpp>
+
+template <int FORMATB, int DTYPE_OUT, int SCALE_ROWS>
+int igemmlt(int m,
+            int n, int k, const int8_t *A, const int8_t *B, void *C,
+            float *row_scale, int lda, int ldb, int ldc) try {
+  dpct::device_ext &dev_ct1 = dpct::get_current_device();
+  sycl::queue &q_ct1 = dev_ct1.in_order_queue();
+#ifdef NO_CUBLASLT
+	return ERR_NOT_IMPLEMENTED;
+#else
+    dpct::blas_gemm::experimental::descriptor_ptr ltHandle;
+    int has_error = 0;
+    dpct::blas_gemm::experimental::matmul_desc_ptr matmulDesc = NULL;
+    dpct::blas_gemm::experimental::matrix_layout_ptr Adesc = NULL, Bdesc = NULL,
+                                                     Cdesc = NULL;
+    oneapi::mkl::transpose opT = oneapi::mkl::transpose::trans;
+    dpct::blas_gemm::experimental::pointer_mode_t alphaVec = dpct::blas_gemm::
+        experimental::pointer_mode_t::alpha_device_vector_beta_zero;
+    dpct::blas_gemm::experimental::order_t col32 =
+        dpct::blas_gemm::experimental::order_t::col32;
+    dpct::blas_gemm::experimental::order_t col_turing =
+        dpct::blas_gemm::experimental::order_t::col4_4r2_8c;
+    dpct::blas_gemm::experimental::order_t col_ampere =
+        dpct::blas_gemm::experimental::order_t::col32_2r_4r4;
+
+    has_error |= checkCublasStatus(DPCT_CHECK_ERROR(
+        Adesc = new dpct::blas_gemm::experimental::matrix_layout_t(
+            dpct::library_data_t::real_int8, m, k, lda)));
+    has_error |= checkCublasStatus(DPCT_CHECK_ERROR(
+        Bdesc = new dpct::blas_gemm::experimental::matrix_layout_t(
+            dpct::library_data_t::real_int8, n, k, ldb)));
+
+    has_error |= checkCublasStatus(DPCT_CHECK_ERROR(Adesc->set_attribute(
+        dpct::blas_gemm::experimental::matrix_layout_t::attribute::order,
+        &col32)));
+    if(FORMATB == COL_TURING)
+      has_error |= checkCublasStatus(DPCT_CHECK_ERROR(Bdesc->set_attribute(
+          dpct::blas_gemm::experimental::matrix_layout_t::attribute::order,
+          &col_turing)));
+    else
+      has_error |= checkCublasStatus(DPCT_CHECK_ERROR(Bdesc->set_attribute(
+          dpct::blas_gemm::experimental::matrix_layout_t::attribute::order,
+          &col_ampere)));
+
+    if(DTYPE_OUT == 32)
+    {
+      has_error |= checkCublasStatus(DPCT_CHECK_ERROR(
+          matmulDesc = new dpct::blas_gemm::experimental::matmul_desc_t(
+              dpct::blas::compute_type::i32, dpct::library_data_t::real_int32)));
+      has_error |= checkCublasStatus(DPCT_CHECK_ERROR(matmulDesc->set_attribute(
+          dpct::blas_gemm::experimental::matmul_desc_t::attribute::trans_b,
+          &opT)));
+      has_error |= checkCublasStatus(DPCT_CHECK_ERROR(
+          Cdesc = new dpct::blas_gemm::experimental::matrix_layout_t(
+              dpct::library_data_t::real_int32, m, n, ldc)));
+      has_error |= checkCublasStatus(DPCT_CHECK_ERROR(Cdesc->set_attribute(
+          dpct::blas_gemm::experimental::matrix_layout_t::attribute::order,
+          &col32)));
+      int alpha = 1, beta = 0;
+      has_error |= checkCublasStatus(
+          DPCT_CHECK_ERROR(dpct::blas_gemm::experimental::matmul(
+              ltHandle, matmulDesc, &alpha, A, Adesc, B, Bdesc, &beta,
+              (int32_t *)C, Cdesc, (int32_t *)C, Cdesc, 0)));
+    }
+    else
+    {
+      has_error |= checkCublasStatus(DPCT_CHECK_ERROR(
+          matmulDesc = new dpct::blas_gemm::experimental::matmul_desc_t(
+              dpct::blas::compute_type::i32, dpct::library_data_t::real_float)));
+      has_error |= checkCublasStatus(DPCT_CHECK_ERROR(matmulDesc->set_attribute(
+          dpct::blas_gemm::experimental::matmul_desc_t::attribute::trans_b,
+          &opT)));
+      has_error |= checkCublasStatus(DPCT_CHECK_ERROR(
+          Cdesc = new dpct::blas_gemm::experimental::matrix_layout_t(
+              dpct::library_data_t::real_int8, m, n, ldc)));
+      has_error |= checkCublasStatus(DPCT_CHECK_ERROR(Cdesc->set_attribute(
+          dpct::blas_gemm::experimental::matrix_layout_t::attribute::order,
+          &col32)));
+      if(!SCALE_ROWS)
+      {
+        float alpha = 1.0f, beta = 0.0f;
+        has_error |= checkCublasStatus(
+            DPCT_CHECK_ERROR(dpct::blas_gemm::experimental::matmul(
+                ltHandle, matmulDesc, &alpha, A, Adesc, B, Bdesc, &beta,
+                (int8_t *)C, Cdesc, (int8_t *)C, Cdesc, 0)));
+      }
+      else
+      {
+        has_error |=
+            checkCublasStatus(DPCT_CHECK_ERROR(matmulDesc->set_attribute(
+                dpct::blas_gemm::experimental::matmul_desc_t::attribute::
+                    pointer_mode,
+                &alphaVec)));
+        has_error |= checkCublasStatus(
+            DPCT_CHECK_ERROR(dpct::blas_gemm::experimental::matmul(
+                ltHandle, matmulDesc, row_scale, A, Adesc, B, Bdesc, NULL,
+                (int8_t *)C, Cdesc, (int8_t *)C, Cdesc, 0)));
+      }
+    }
+
+    if (Cdesc) has_error |= checkCublasStatus(DPCT_CHECK_ERROR(delete (Cdesc)));
+    if (Bdesc) has_error |= checkCublasStatus(DPCT_CHECK_ERROR(delete (Bdesc)));
+    if (Adesc) has_error |= checkCublasStatus(DPCT_CHECK_ERROR(delete (Adesc)));
+    if (matmulDesc) has_error |=
+        checkCublasStatus(DPCT_CHECK_ERROR(delete (matmulDesc)));
+    if(has_error == 1)
+      printf("error detected");
+
+    return has_error;
+#endif // NO_CUBLASLT
+}
+catch (sycl::exception const &exc) {
+  std::cerr << exc.what() << "Exception caught at file:" << __FILE__
+            << ", line:" << __LINE__ << std::endl;
+  std::exit(1);
+}
+/*
 
 template <int FORMATB, int DTYPE_OUT, int SCALE_ROWS>
 int igemmlt(int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc) try {
@@ -481,7 +701,7 @@ int igemmlt(int m, int n, int k, const int8_t *A, const int8_t *B, void *C, floa
 } catch (sycl::exception const &exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
     return 1;
-}
+}*/
 
 /*
 template <int FORMATB, int DTYPE_OUT, int SCALE_ROWS> int igemmlt( int m, int n, int k, const int8_t *A, const int8_t *B, void *C, float *row_scale, int lda, int ldb, int ldc){
